@@ -1,20 +1,25 @@
 # FaceRecognitionSystemRPI
 A collaborative work by Team Koppel and Team Secret of PCEIT-03-601P students of Rizal Technological University
 
-Group name: Team Koppel
-Members: 
-1. Cruz, Justin Jeremi A.
-2. Villalba, Jamaica
-3. Andres, Cris John V.
-4. Eguia, Karl Eugene N.
-5. Dionisio, John Marti
+# TeamLeader
+1. Cruz, Justin Jeremi A. 
 
-Group name: Team Secret
-Members:
-1. Pascual, Erick John
-2. Bosales, Astro Ben
-3. Durana, Jeric
-4. Velante, Ira frank 
-5. Arqueza, Lanz Adrian
+# Full-Stack
+1. Cruz, Justin Jeremi A. 
+2. Eguia, Karl Eugene N. 
+
+# Back-End
+1. Bosales, Astro Ben 
+2. Pascual, Erick John 
+
+# Front-End
+1. Dionisio, John Marti 
+2. Durana, Jeric 
+
+# Documentation
+1. Villalba, Jamaica 
+2. Andres, Cris John V. 
+3. Velante, Ira frank 
+4. Arqueza, Lanz Adrian 
 
 System: RTU Pasig Faculty Members' Face Recognition-Based Attendance System

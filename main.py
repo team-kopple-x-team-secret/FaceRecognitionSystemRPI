@@ -1,5 +1,6 @@
 import tkinter as tk
 from PIL import Image, ImageTk
+from tkinter import messagebox
 
 root = tk.Tk()
 root.title("Login")
@@ -20,7 +21,15 @@ username_entry.place(x=571, y=288, width=316, height=60)
 password_entry = tk.Entry(root, show="*", width=30, bg="#D9D9D9", bd=0, highlightthickness=0, font=font_style)
 password_entry.place(x=571, y=384, width=316, height=60)
 
-login_button = tk.Button(root, text="Login", bg="#3E806E", fg="#D9D9D9", bd=0, highlightthickness=0, font=font_style)
+def login():
+    username = username_entry.get()
+    password = password_entry.get()
+    if username == "user" and password == "1234":
+        messagebox.showinfo("Login Successful", "You have successfully logged in!")
+    else:
+        messagebox.showerror("Login Failed", "Invalid username or password")
+
+login_button = tk.Button(root, text="Login", bg="#3E806E", fg="#D9D9D9", bd=0, highlightthickness=0, font=font_style, command=login)
 login_button.place(x=479, y=509, width=408, height=60)
 
 canvas.create_rectangle(479, 288, 571, 348, fill="#B97A7A", outline="")
@@ -33,6 +42,5 @@ canvas.create_image(511, 302, image=username_photo, anchor="nw")
 password_icon = Image.open("src/icon_password.png")
 password_photo = ImageTk.PhotoImage(password_icon)
 canvas.create_image(511, 398, image=password_photo, anchor="nw")
-
 
 root.mainloop()

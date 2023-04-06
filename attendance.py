@@ -1,6 +1,7 @@
 import tkinter as tk
 from PIL import Image, ImageTk
 from tkinter import messagebox
+import cv2
 import sys
 
 class Attendance:
@@ -22,3 +23,5 @@ class Attendance:
         if messagebox.askokcancel("Quit", "Do you want to quit?"):
             self.root.destroy()
             sys.exit()
+
+        

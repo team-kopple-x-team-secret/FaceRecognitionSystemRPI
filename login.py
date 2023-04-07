@@ -8,7 +8,7 @@ class Login:
     def __init__(self):
         self.root = tk.Tk()
         self.root.title("Login")
-        self.root.geometry("1366x768")
+        self.root.geometry("1920x1080")
 
         # Load background image
         self.bg_image = ImageTk.PhotoImage(Image.open("src/login/login.png"))

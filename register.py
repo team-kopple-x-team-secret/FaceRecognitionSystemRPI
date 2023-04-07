@@ -1,18 +1,16 @@
 import tkinter as tk
 from PIL import Image, ImageTk
 from tkinter import messagebox
-from register import Register
-import cv2
 import sys
 
-class Attendance:
+class Register:
     def __init__(self, root):
         self.root = root
-        self.root.title("Attendance")
+        self.root.title("Register Form")
         self.root.geometry("1366x768")
         self.root.protocol("WM_DELETE_WINDOW", self.on_closing)
         
-        self.bg_image = ImageTk.PhotoImage(Image.open("src/main/bg_main.png"))
+        self.bg_image = ImageTk.PhotoImage(Image.open("src/register_form/step1.png"))
         
         canvas = tk.Canvas(self.root, width=1366, height=768)
         canvas.pack(fill="both", expand=True)
@@ -20,18 +18,6 @@ class Attendance:
         
         font_style = ("Rubik", 16)
         
-        # create a button to open the register form
-        register_button = tk.Button(self.root, text="Register", font=font_style, command=self.open_register_form)
-        register_button.place(x=600, y=500)
-
-    def open_register_form(self):
-        # Hide attendance window
-        self.root.withdraw()
-
-        # Open register form window
-        register_window = tk.Toplevel()
-        register_form = Register(register_window)
-
     def on_closing(self):
         if messagebox.askokcancel("Quit", "Do you want to quit?"):
             self.root.destroy()

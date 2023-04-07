@@ -11,7 +11,7 @@ class Login:
         self.root.geometry("1366x768")
 
         # Load background image
-        self.bg_image = ImageTk.PhotoImage(Image.open("src/login.png"))
+        self.bg_image = ImageTk.PhotoImage(Image.open("src/login/login.png"))
 
         canvas = tk.Canvas(self.root, width=1366, height=768)
         canvas.pack(fill="both", expand=True)
@@ -31,11 +31,11 @@ class Login:
         canvas.create_rectangle(479, 288, 571, 348, fill="#BF616A", outline="")
         canvas.create_rectangle(479, 384, 571, 444, fill="#BF616A", outline="")
 
-        username_icon = Image.open("src/icon_username.png")
+        username_icon = Image.open("src/login/icon_username.png")
         username_photo = ImageTk.PhotoImage(username_icon)
         canvas.create_image(511, 302, image=username_photo, anchor="nw")
 
-        password_icon = Image.open("src/icon_password.png")
+        password_icon = Image.open("src/login/icon_password.png")
         password_photo = ImageTk.PhotoImage(password_icon)
         canvas.create_image(511, 398, image=password_photo, anchor="nw")
 

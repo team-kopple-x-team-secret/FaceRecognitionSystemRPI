@@ -9,12 +9,12 @@ class Attendance:
     def __init__(self, root):
         self.root = root
         self.root.title("Attendance")
-        self.root.geometry("1366x768")
+        self.root.geometry("1920x1080")
         self.root.protocol("WM_DELETE_WINDOW", self.on_closing)
         
         self.bg_image = ImageTk.PhotoImage(Image.open("src/main/bg_main.png"))
         
-        canvas = tk.Canvas(self.root, width=1366, height=768)
+        canvas = tk.Canvas(self.root, width=1920, height=1080)
         canvas.pack(fill="both", expand=True)
         canvas.create_image(0, 0, image=self.bg_image, anchor="nw")
         

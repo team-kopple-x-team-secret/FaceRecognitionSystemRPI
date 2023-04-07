@@ -4,13 +4,13 @@ import numpy as np
 from sklearn.preprocessing import LabelEncoder
 
 # Load the pre-trained face detection model
-face_cascade = cv2.CascadeClassifier('/home/celery/Desktop/test/haarcascade_frontalface_default.xml')
+face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
 
 # Load the pre-trained deep learning face recognition model
 model = cv2.face.LBPHFaceRecognizer_create()
 
 # Define the dataset directory and the labels for each person
-data_dir = '/home/celery/Desktop/test/Images/'
+data_dir = 'test/Images/'
 labels = os.listdir(data_dir)
 
 # Initialize empty arrays to store the face data and labels
@@ -59,4 +59,4 @@ face_labels = np.array(face_labels).astype(np.int32)
 model.train(face_data, face_labels)
 
 # Save the trained model for later use
-model.save('/home/celery/Desktop/test/trained_model.xml')
+model.save('test/trained_model.xml')

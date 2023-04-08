@@ -1,62 +1,44 @@
 import cv2
-import os
 import numpy as np
-from sklearn.preprocessing import LabelEncoder
+import os
 
-# Load the pre-trained face detection model
-face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
+# Path to the face detection cascade file
+cascade_path = "src\haarcascade_frontalface_default.xml"
 
-# Load the pre-trained deep learning face recognition model
-model = cv2.face.LBPHFaceRecognizer_create()
+# Path to the dataset folder
+dataset_path = "Staff"
 
-# Define the dataset directory and the labels for each person
-data_dir = 'test/Images/'
-labels = os.listdir(data_dir)
+# Load the face detection cascade
+face_cascade = cv2.CascadeClassifier(cascade_path)
 
-# Initialize empty arrays to store the face data and labels
-face_data = []
-face_labels = []
+# Load images and labels
+images = []
+labels = []
+label_names = []
 
-# Initialize the label encoder
-le = LabelEncoder()
+for label_name in os.listdir(dataset_path):
+    label_path = os.path.join(dataset_path, label_name)
+    if os.path.isdir(label_path):
+        for image_name in os.listdir(label_path):
+            image_path = os.path.join(label_path, image_name)
+            image = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
 
-# Loop through each person in the dataset
-for label in labels:
-    # Define the path to the person's image directory
-    label_dir = os.path.join(data_dir, label)
+            # Detect faces in the image
+            faces = face_cascade.detectMultiScale(image, scaleFactor=1.2, minNeighbors=5)
 
-    # Loop through each image in the person's image directory
-    for file in os.listdir(label_dir):
-        # Load the image
-        img = cv2.imread(os.path.join(label_dir, file))
+            # Crop and resize the face regions
+            for (x, y, w, h) in faces:
+                face = cv2.resize(image[y:y+h, x:x+w], (100, 100))
+                images.append(face)
+                labels.append(len(label_names))
+            label_names.append(label_name)
 
-        # Convert the image to grayscale
-        gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+# Train the model
+face_recognizer = cv2.face.LBPHFaceRecognizer_create()
+face_recognizer.train(images, np.array(labels))
 
-        # Detect the face in the image
-        faces = face_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=5)
+# Save the trained model
+model_path = "src/face_recognizer_model.xml"
+face_recognizer.write(model_path)
 
-        # Loop through each detected face
-        for (x, y, w, h) in faces:
-            # Crop the face from the image
-            face = gray[y:y+h, x:x+w]
-
-            # Resize the face to a fixed size (e.g., 100x100)
-            face = cv2.resize(face, (100, 100))
-
-            # Append the face data and label to the arrays
-            face_data.append(face)
-            face_labels.append(label)
-
-# Transform the face labels to integer values using the label encoder
-face_labels = le.fit_transform(face_labels)
-
-# Convert the face data and labels to numpy arrays
-face_data = np.array(face_data)
-face_labels = np.array(face_labels).astype(np.int32)
-
-# Train the face recognition model using the face data and labels
-model.train(face_data, face_labels)
-
-# Save the trained model for later use
-model.save('test/trained_model.xml')
+print("Training complete. Model saved to", model_path)

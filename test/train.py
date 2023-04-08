@@ -3,7 +3,7 @@ import numpy as np
 import os
 
 # Path to the face detection cascade file
-cascade_path = "src\haarcascade_frontalface_default.xml"
+cascade_path = "src/haarcascade_frontalface_default.xml"
 
 # Path to the dataset folder
 dataset_path = "Staff"

@@ -3,12 +3,12 @@ import numpy as np
 import os
 
 # Load the trained model
-model_path = "face_recognizer_model.xml"
+model_path = "src/face_recognizer_model.xml"
 face_recognizer = cv2.face.LBPHFaceRecognizer_create()
 face_recognizer.read(model_path)
 
 # Load the cascades
-face_cascade = cv2.CascadeClassifier('src\haarcascade_frontalface_default.xml')
+face_cascade = cv2.CascadeClassifier('src/haarcascade_frontalface_default.xml')
 
 # Load the folders
 folders = os.listdir("Staff")

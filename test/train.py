@@ -1,44 +1,41 @@
 import cv2
-import numpy as np
+import face_recognition
+import pickle
 import os
 
-# Path to the face detection cascade file
-cascade_path = "src/haarcascade_frontalface_default.xml"
 
-# Path to the dataset folder
-dataset_path = "Staff"
+# Importing student images
+folderPath = 'Faces'
+pathList = os.listdir(folderPath)
+print(pathList)
+imgList = []
+studentIds = []
+for student in pathList:
+    studentPath = os.path.join(folderPath, student)
+    imagesList = os.listdir(studentPath)
+    for path in imagesList:
+        imgList.append(cv2.imread(os.path.join(studentPath, path)))
+        studentIds.append(os.path.splitext(student)[0])
 
-# Load the face detection cascade
-face_cascade = cv2.CascadeClassifier(cascade_path)
+print(studentIds)
 
-# Load images and labels
-images = []
-labels = []
-label_names = []
 
-for label_name in os.listdir(dataset_path):
-    label_path = os.path.join(dataset_path, label_name)
-    if os.path.isdir(label_path):
-        for image_name in os.listdir(label_path):
-            image_path = os.path.join(label_path, image_name)
-            image = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
+def findEncodings(imagesList):
+    encodeList = []
+    for img in imagesList:
+        img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+        encode = face_recognition.face_encodings(img)[0]
+        encodeList.append(encode)
 
-            # Detect faces in the image
-            faces = face_cascade.detectMultiScale(image, scaleFactor=1.2, minNeighbors=5)
+    return encodeList
 
-            # Crop and resize the face regions
-            for (x, y, w, h) in faces:
-                face = cv2.resize(image[y:y+h, x:x+w], (100, 100))
-                images.append(face)
-                labels.append(len(label_names))
-            label_names.append(label_name)
 
-# Train the model
-face_recognizer = cv2.face.LBPHFaceRecognizer_create()
-face_recognizer.train(images, np.array(labels))
+print("Encoding Started ...")
+encodeListKnown = findEncodings(imgList)
+encodeListKnownWithIds = [encodeListKnown, studentIds]
+print("Encoding Complete")
 
-# Save the trained model
-model_path = "src/face_recognizer_model.xml"
-face_recognizer.write(model_path)
-
-print("Training complete. Model saved to", model_path)
+file = open("EncodeFile.p", 'wb')
+pickle.dump(encodeListKnownWithIds, file)
+file.close()
+print("File Saved")

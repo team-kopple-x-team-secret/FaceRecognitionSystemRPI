@@ -1,7 +1,7 @@
 import tkinter as tk
 from PIL import Image, ImageTk
 from tkinter import messagebox
-from register import Register
+import merge
 import cv2
 import sys
 
@@ -30,11 +30,10 @@ class Attendance:
 
         # Open register form window
         register_window = tk.Toplevel()
-        register_form = Register(register_window)
+        register_form = merge.Register(register_window)
 
     def on_closing(self):
         if messagebox.askokcancel("Quit", "Do you want to quit?"):
             self.root.destroy()
             sys.exit()
 
-        

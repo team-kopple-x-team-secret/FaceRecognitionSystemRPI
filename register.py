@@ -1,9 +1,9 @@
 import tkinter as tk
 from PIL import Image, ImageTk
 from tkinter import messagebox
-from tkcalendar import Calendar
 from tkinter import ttk
 import sys
+from add_file import Add_File
 
 class Register:
     def __init__(self, root):
@@ -11,10 +11,10 @@ class Register:
         self.root.title("Register Form")
         self.root.geometry("1920x1080")
         self.root.protocol("WM_DELETE_WINDOW", self.on_closing)
-        
+        self.root.attributes('-fullscreen', True)
         self.bg_image = ImageTk.PhotoImage(Image.open("src/register_form/step1.png"))
         
-        canvas = tk.Canvas(self.root, width=1366, height=768)
+        canvas = tk.Canvas(self.root, width=1920, height=1080)
         canvas.pack(fill="both", expand=True)
         canvas.create_image(0, 0, image=self.bg_image, anchor="nw")
         
@@ -74,10 +74,6 @@ class Register:
         date_of_birth = self.date_of_birth.get()
         selected_gender = self.selected_gender.get()
 
-                # Print the values
-        print("Employee ID:", employee_id)
-        print("First Name:", first_name)
-        print("Middle Initial:", middle_initial)
-        print("Last Name:", last_name)
-        print("Date of Birth:", date_of_birth)
-        print("Selected Gender:", selected_gender)
+        addfile_window = tk.Toplevel()
+        addFile = Add_File(addfile_window, self.root)
+        self.root.withdraw()

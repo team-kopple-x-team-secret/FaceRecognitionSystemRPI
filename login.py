@@ -8,12 +8,14 @@ class Login:
     def __init__(self):
         self.root = tk.Tk()
         self.root.title("Login")
-        self.root.geometry("1920x1080")
-
+        self.root.attributes('-fullscreen', True)
         # Load background image
         self.bg_image = ImageTk.PhotoImage(Image.open("src/login/login.png"))
 
-        canvas = tk.Canvas(self.root, width=1366, height=768)
+        # Set window size to match image dimensions
+        self.root.geometry(f"{self.bg_image.width()}x{self.bg_image.height()}")
+        
+        canvas = tk.Canvas(self.root, width=self.bg_image.width(), height=self.bg_image.height())
         canvas.pack(fill="both", expand=True)
         canvas.create_image(0, 0, image=self.bg_image, anchor="nw")
 
@@ -52,3 +54,4 @@ class Login:
         if messagebox.askokcancel("Quit", "Do you want to quit?"):
             self.root.destroy()
             sys.exit()
+

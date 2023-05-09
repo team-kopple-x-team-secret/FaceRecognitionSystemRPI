@@ -46,7 +46,12 @@ class Login:
             # Open attendance window
             attendance_window = tk.Toplevel()
             attendance = Attendance(attendance_window)
+        
+        elif username == "admin" and password == "1234":
+            messagebox.showinfo("Login Successful", "You have successfully logged in!")
 
+            admin_window = tk.Toplevel()
+            admin = Attendance(admin_window)
         else:
             messagebox.showerror("Login Failed", "Invalid username or password")
 
@@ -54,4 +59,6 @@ class Login:
         if messagebox.askokcancel("Quit", "Do you want to quit?"):
             self.root.destroy()
             sys.exit()
+
+    
 

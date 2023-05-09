@@ -134,7 +134,7 @@ class Add_File:
 
     def next_window(self):
 
-        address = self.address.get()
+        address = self.full_address.get()
         email = self.email_address.get()
         phone = self.phone_number.get()
 

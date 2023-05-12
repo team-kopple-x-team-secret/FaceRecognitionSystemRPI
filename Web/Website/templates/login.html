@@ -17,7 +17,7 @@
 
 <body>
 
-   <!-- Main Container -->
+  <!-- Main Container -->
 
   <div class="container d-flex justify-content-center align-items-center min-vh-100">
     <!-- Login Container -->
@@ -50,44 +50,40 @@
             <h2>Login Account</h2>
           </div>
 
-          <center><img src="{{ url_for('static', filename='logoblack.png') }}" class="login" /></center>
+          <form action="{{ url_for('views.login') }}" method="post">
 
+            <center><img src="{{ url_for('static', filename='logoblack.png') }}" class="login" /></center>
 
-          <div class="form-floating">
-            <input type="email" class="form-control" id="Email" placeholder="name@example.com" />
-            <label for="floatingInput">Email address</label>
-          </div>
-          <div class="form-floating">
-            <input type="password" class="form-control" id="Password" placeholder="Password" />
-            <label for="floatingPassword">Password</label>
-          </div>
-
-
-          <div class="signup">
-            Don't have an account ?
-            <!--
+            <div class="form-floating">
+              <input type="email" class="form-control" id="Email" name="email" placeholder="name@example.com"
+                required />
+              <label for="floatingInput">Email address</label>
+            </div>
+            <div class="form-floating">
+              <input type="password" class="form-control" id="Password" name="pass" placeholder="Password" required />
+              <label for="floatingPassword">Password</label>
+            </div>
+            <div class="signup">
+              Don't have an account ?
+              <!--
                 <a href="#">Sign up</a>-->
+              <a href="sign up.html" target="_self"> Sign up </a>
+            </div>
 
-            <a href="sign up.html" target="_self"> Sign up </a>
-          </div>
-
-          <div class="d-grid gap-2 d-md-block">
-            <form method="post">
-              <a href="{{ url_for('views.index') }}" target="_self">
-                <button class="btn btn-success" id="submit" type="button">
-                  Login
-                </button>
+            <div class="d-grid gap-2 d-md-block">
+              <button class="btn btn-success" id="submit" type="submit" value="submit">
+                Login
+              </button>
               </a>
-            </form>
+              <button class="btn btn-outline-success" id="clear" type="button">
+          </form>
 
-            <button class="btn btn-outline-success" id="clear" type="button">
-
-              Clear
-            </button>
-          </div>
+          Clear
+          </button>
         </div>
       </div>
     </div>
+  </div>
   </div>
   <script>
     $(document).ready(function () {

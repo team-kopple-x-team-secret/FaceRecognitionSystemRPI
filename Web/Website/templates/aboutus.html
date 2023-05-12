@@ -12,7 +12,7 @@
       rel="stylesheet"
     />
     <title>About Us-Rtu Pasig Faculty Members' Face Recognition-Based Attendace System</title>
-    <link rel="stylesheet" href="../css/style.css" />
+    <link rel="stylesheet" href="{{ url_for('static',filename='style.css') }}" />
   </head>
 
   <body>
@@ -20,27 +20,27 @@
     <div class="container">
       <div class="navbar">
         <div class="logo">
-          <img src="../images/rtulogo.png" />
+          <img src="{{ url_for('static', filename='rtulogo.png') }}" />
         </div>
         <nav>
           <ul>
-            <li><a href="../HTML/aboutus.html">About Us</a></li>
+            <li><a href="{{ url_for('views.aboutus') }}">About Us</a></li>
             <li><a href="#">Camera</a></li>
-             <li><a href="#">Schedule</a></li>
-             <li><a href="../HTML/log.html">Log</a></li>
+            <li><a href="#">Schedule</a></li>
+            <li><a href="{{ url_for('views.log') }}">Log</a></li>
             <li><a href="#">Admin</a></li>
-            <li><a href="../HTML/faculty.html">Faculty</a></li>
-            <li><a href="../HTML/profile.html">Profile</a></li>
-            <li><a href="../HTML/index.html">Home</a></li>
+            <li><a href="{{ url_for('views.faculty') }}">Faculty</a></li>
+            <li><a href="{{ url_for('views.profile') }}">Profile</a></li>
+            <li><a href="{{ url_for('views.index') }}">Home</a></li>
             <li><p>Face Recognition-Based Attendance System</p></li>
           </ul>
         </nav>
       </div>
       <div class="sidebar">
         <div class="social-links">
-          <img src="..//images/facebook.png" />
-          <img src="../images/gmail.png" />
-          <img src="../images/phone.png" />
+          <img src="{{ url_for('static', filename='facebook.png') }}" />
+          <img src="{{ url_for('static', filename='gmail.png') }}" />
+          <img src="{{ url_for('static', filename='phone.png') }}" />
         </div>
       </div>
 

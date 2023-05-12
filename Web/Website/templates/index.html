@@ -23,15 +23,15 @@
       </div>
       <nav>
         <ul>
-          <li><a href="../HTML/aboutus.html">About Us</a></li>
+          <li><a href="{{ url_for('views.aboutus') }}">About Us</a></li>
           <li><a href="#">Camera</a></li>
           <li><a href="#">Schedule</a></li>
-          <li><a href="../HTML/log.html">Log</a></li>
+          <li><a href="{{ url_for('views.log') }}">Log</a></li>
           <li><a href="#">Admin</a></li>
-          <li><a href="../HTML/faculty.html">Faculty</a></li>
-          <li><a href="../HTML/profile.html">Profile</a></li>
-          <li><a href="../HTML/index.html">Home</a></li>
-          <li>
+          <li><a href="{{ url_for('views.faculty') }}">Faculty</a></li>
+          <li><a href="{{ url_for('views.profile') }}">Profile</a></li>
+          <li><a href="{{ url_for('views.index') }}">Home</a></li>
+        <li>
             <p>Face Recognition-Based Attendance System</p>
           </li>
         </ul>
@@ -55,7 +55,7 @@
             their profile page.
             These comprise the employee's name, birthday, address, college department, and attendance.
           </p>
-          <a href="../HTML/profile.html">See More</a>
+          <a href="{{ url_for('views.profile') }}">See More</a>
         </div>
 
         <div class="msg-col">

@@ -51,6 +51,7 @@ nav ul li {
   font-size: 1.6rem;
   float: right;
 }
+
 nav ul p {
   list-style: none;
   position: relative;
@@ -60,6 +61,7 @@ nav ul p {
   font-size: 1.6rem;
   float: left;
 }
+
 nav ul li a:hover {
   color: burlywood;
   border-bottom: 0.2rem solid;
@@ -133,15 +135,16 @@ nav ul li a {
   width: 600px;
   height: 280px;
   position: relative;
-  
+
 }
+
 /*here*/
 .msg-col p {
   text-shadow: 0.5px 0.5px burlywood;
   text-align: justify;
   text-justify: inter-word;
   text-indent: 50px;
-  
+
 }
 
 .msg-col h1 {
@@ -152,7 +155,7 @@ nav ul li a {
   font-size: 60px;
   margin: 20px 0;
   margin-bottom: 20px;
-  
+
 }
 
 .msg-col {

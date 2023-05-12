@@ -64,11 +64,13 @@
               <label for="floatingPassword">Password</label>
             </div>
             <div class="signup">
-              Don't have an account ?
+              Forget password ?
               <!--
                 <a href="#">Sign up</a>-->
-              <a href="sign up.html" target="_self"> Sign up </a>
+              <a href="{{ url_for('views.forgetpass') }}" target="_self"> Reset </a>
             </div>
+
+
 
             <div class="d-grid gap-2 d-md-block">
               <button class="btn btn-success" id="submit" type="submit" value="submit">

@@ -14,7 +14,7 @@ body {
   position: relative;
   padding-top: 30px;
   box-sizing: border-box;
-  background: url(../images/rtu5.jpeg) center / cover;
+  background: url("rtu5.jpeg");
   
   backdrop-filter: blur(4px);
   width: 100%;
@@ -414,4 +414,33 @@ tbody td.active {
     height: 15px;
     margin-bottom: 30px;
   }
-  
+  .dropdown {
+    position: relative;
+    display: inline-block;
+  }
+
+  .dropdown-toggle {
+    background-color: #fff;
+    border: none;
+    color: #333;
+    padding: 10px;
+    cursor: pointer;
+  }
+
+  .dropdown-menu {
+    display: none;
+    position: absolute;
+    background-color: #fff;
+    z-index: 1;
+  }
+
+  .dropdown-menu a {
+    display: block;
+    color: #333;
+    padding: 10px;
+    text-decoration: none;
+  }
+
+  .dropdown-menu a:hover {
+    background-color: #f5f5f5;
+  }

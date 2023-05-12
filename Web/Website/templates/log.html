@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Log-RTU Pasig Faculty Face Recognition Based System</title>
-    <link rel="stylesheet" href="../CSS/profilestyle.css" />
+    <link rel="stylesheet" href="{{ url_for('static',filename='profilestyle.css') }}" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -26,27 +26,28 @@
     <div class="container">
       <div class="navbar">
         <div class="logo">
-          <img src="../images/rtulogo.png" />
+          <img src="{{ url_for('static', filename='rtulogo.png') }}" />
         </div>
         <nav>
           <ul>
-            <li><a href="../HTML/aboutus.html">About Us</a></li>
+            <li><a href="{{ url_for('views.login') }}">Logout</a></li>
+            <li><a href="{{ url_for('views.aboutus') }}">About Us</a></li>
             <li><a href="#">Camera</a></li>
             <li><a href="#">Schedule</a></li>
-             <li><a href="#">Log</a></li>
+            <li><a href="{{ url_for('views.log') }}">Log</a></li>
             <li><a href="#">Admin</a></li>
-            <li><a href="../HTML/faculty.html">Faculty</a></li>
-            <li><a href="../HTML/profile.html">Profile</a></li>
-            <li><a href="../HTML/index.html">Home</a></li>
+            <li><a href="{{ url_for('views.faculty') }}">Faculty</a></li>
+            <li><a href="{{ url_for('views.profile') }}">Profile</a></li>
+            <li><a href="{{ url_for('views.index') }}">Home</a></li>
             <li><p>Face Recognition-Based Attendance System</p></li>
           </ul>
         </nav>
       </div>
       <div class="sidebar">
         <div class="social-links">
-          <img src="..//images/facebook.png" />
-          <img src="../images/gmail.png" />
-          <img src="../images/phone.png" />
+          <img src="{{ url_for('static', filename='facebook.png') }}" />
+        <img src="{{ url_for('static', filename='gmail.png') }}" />
+        <img src="{{ url_for('static', filename='phone.png') }}" />
         </div>
       </div>
 
@@ -55,7 +56,7 @@
         <h1>Employees (Profile)</h1>
         <div class="input-group">
           <input type="search" placeholder="Search Data..." />
-          <img src="../images/search.png" alt="" />
+          <img src="{{ url_for('static', filename='search.png') }}" alt="" />
         </div>
         <div class="export__file">
           <label
@@ -67,16 +68,16 @@
           <div class="export__file-options">
             <label>Export As &nbsp; &#10140;</label>
             <label for="export-file" id="toPDF"
-              >PDF <img src="../images/pdf.png" alt=""
+              >PDF <img src="{{ url_for('static', filename='pdf.png') }}" alt=""
             /></label>
             <label for="export-file" id="toJSON"
-              >JSON <img src="../images/json.png" alt=""
+              >JSON <img src="{{ url_for('static', filename='json.png') }}" alt=""
             /></label>
             <label for="export-file" id="toCSV"
-              >CSV <img src="../images/csv.png" alt=""
+              >CSV <img src="{{ url_for('static', filename='csv.png') }}" alt=""
             /></label>
             <label for="export-file" id="toEXCEL"
-              >EXCEL <img src="../images/excel.png" alt=""
+              >EXCEL <img src="{{ url_for('static', filename='excel.png') }}" alt=""
             /></label>
           </div>
         </div>
@@ -100,7 +101,7 @@
           <tbody>
             <tr>
               <td>1</td>
-              <td><img src="../images/person.png" alt="" />Cj Andres</td>
+              <td><img src="{{ url_for('static', filename='person.png') }}" alt="" />Cj Andres</td>
               <td>
                 <p class="status present">7:00am</p>
               </td>
@@ -112,7 +113,7 @@
             </tr>
             <tr>
               <td>2</td>
-              <td><img src="../images/person.png" alt="" /> Justin Jeremi Cruz</td>
+              <td><img src="{{ url_for('static', filename='person.png') }}" alt="" /> Justin Jeremi Cruz</td>
               <td>
                 <p class="status present">7:00am</p>
               </td>
@@ -123,7 +124,7 @@
             </tr>
             <tr>
               <td>3</td>
-              <td><img src="../images/person.png" alt="" /> Karl Eugene Eguia</td>
+              <td><img src="{{ url_for('static', filename='person.png') }}" alt="" /> Karl Eugene Eguia</td>
               <td>
                 <p class="status present">7:00am</p>
               </td>
@@ -134,7 +135,7 @@
             </tr>
             <tr>
               <td>4</td>
-              <td><img src="../images/person.png" alt="" /> Jamaica Villalba</td>
+              <td><img src="{{ url_for('static', filename='person.png') }}" alt="" /> Jamaica Villalba</td>
               <td>
                 <p class="status present">7:00am</p>
               </td>
@@ -146,7 +147,7 @@
             <tr>
 
               <td>5</td>
-              <td><img src="../images/person.png" alt="" /> John Marti Dionisio</td>
+              <td><img src="{{ url_for('static', filename='person.png') }}" alt="" /> John Marti Dionisio</td>
             
               <td>
                 <p class="status present">7:00am</p>
@@ -158,7 +159,7 @@
             </tr>
             <tr>
               <td>6</td>
-              <td><img src="../images/person.png" alt="" /> Astro Ben Bosales</td>
+              <td><img src="{{ url_for('static', filename='person.png') }}" alt="" /> Astro Ben Bosales</td>
               <td>
                 <p class="status present">7:00am</p>
               </td>
@@ -169,7 +170,7 @@
             </tr>
             <tr>
               <td>7</td>
-              <td><img src="../images/person.png" alt="" /> Erick John Pascual</td>
+              <td><img src="{{ url_for('static', filename='person.png') }}" alt="" /> Erick John Pascual</td>
               <td>
                 <p class="status present">7:00am</p>
               </td>
@@ -180,7 +181,7 @@
             </tr>
             <tr>
               <td>8</td>
-              <td><img src="../images/person.png" alt="" /> Jeric Durana</td>
+              <td><img src="{{ url_for('static', filename='person.png') }}" alt="" /> Jeric Durana</td>
               <td>
                 <p class="status present">7:00am</p>
               </td>
@@ -191,7 +192,7 @@
             </tr>
             <tr>
               <td>9</td>
-              <td><img src="../images/person.png" alt="" /> Irafrank Villante</td>
+              <td><img src="{{ url_for('static', filename='person.png') }}" alt="" /> Irafrank Villante</td>
               <td>
                 <p class="status present">7:00am</p>
               </td>
@@ -203,7 +204,7 @@
 
             <tr>
               <td>10</td>
-              <td><img src="../images/person.png" alt="" /> Lanz Adrian Aqueza</td>
+              <td><img src="{{ url_for('static', filename='person.png') }}" alt="" /> Lanz Adrian Aqueza</td>
               <td>
                 <p class="status present">7:00am</p>
               </td>

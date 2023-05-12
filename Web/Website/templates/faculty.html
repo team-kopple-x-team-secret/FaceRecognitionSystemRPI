@@ -11,6 +11,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@200;400&display=swap" rel="stylesheet" />
+
 </head>
 
 <body>
@@ -27,12 +28,15 @@
       </div>
       <nav>
         <ul>
+          <li><a href="{{ url_for('views.login') }}">Logout</a></li>
           <li><a href="{{ url_for('views.aboutus') }}">About Us</a></li>
           <li><a href="#">Camera</a></li>
           <li><a href="#">Schedule</a></li>
           <li><a href="{{ url_for('views.log') }}">Log</a></li>
           <li><a href="#">Admin</a></li>
+
           <li><a href="{{ url_for('views.faculty') }}">Faculty</a></li>
+
           <li><a href="{{ url_for('views.profile') }}">Profile</a></li>
           <li><a href="{{ url_for('views.index') }}">Home</a></li>
           <li>
@@ -52,7 +56,16 @@
     <main class="table">
       <section class="table__header">
         <h1>Faculty Members</h1>
+        <div class="dropdown">
+          <button class="dropdown-toggle" onclick="toggleDropdown()">Faculty</button>
+          <div class="dropdown-menu" id="dropdownMenu">
+            <a href="{{ url_for('views.addfaculty') }}">Add Faculty Member</a>
+            <a href="#">Another action</a>
+            <a href="#">Something else here</a>
+          </div>
+        </div>
         <div class="input-group">
+
           <input type="search" placeholder="Search Data..." />
           <img src="{{ url_for('static', filename='search.png') }}" alt="" />
         </div>
@@ -88,72 +101,33 @@
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>1</td>
-              <td><img src="{{ url_for('static', filename='person.png') }}" alt="" />Cj Andres</td>
 
-              </td>
-              <td><strong> CEA </strong></td>
-            </tr>
-            <tr>
-              <td>2</td>
-              <td><img src="{{ url_for('static', filename='person.png') }}" alt="" /> Justin Jeremi Cruz</td>
 
-              <td><strong>CEA</strong></td>
-            </tr>
-            <tr>
-              <td>3</td>
-              <td><img src="{{ url_for('static', filename='person.png') }}" alt="" /> Karl Eugene Eguia</td>
-
-              <td><strong>CEA</strong></td>
-            </tr>
-            <tr>
-              <td>4</td>
-              <td><img src="{{ url_for('static', filename='person.png') }}" alt="" /> Jamaica Villalba</td>
-
-              <td><strong>CEA</strong></td>
-            </tr>
-            <tr>
-              <td>5</td>
-              <td><img src="{{ url_for('static', filename='person.png') }}" alt="" /> John Marti Dionisio</td>
-
-              <td><strong>CEA</strong></td>
-            </tr>
-            <tr>
-              <td>6</td>
-              <td><img src="{{ url_for('static', filename='person.png') }}" alt="" /> Astro Ben Bosales</td>
-
-              <td><strong>CEA</strong></td>
-            </tr>
-            <tr>
-              <td>7</td>
-              <td><img src="{{ url_for('static', filename='person.png') }}" alt="" /> Erick John Pascual</td>
-
-              <td><strong>CEA</strong></td>
-            </tr>
-            <tr>
-              <td>8</td>
-              <td><img src="{{ url_for('static', filename='person.png') }}" alt="" /> Jeric Durana</td>
-
-              <td><strong>CEA</strong></td>
-            </tr>
-            <tr>
-              <td>9</td>
-              <td><img src="{{ url_for('static', filename='person.png') }}" alt="" /> Irafrank Villante</td>
-
-              <td><strong>CEA</strong></td>
-            </tr>
+            {%for row in faculty %}
 
             <tr>
-              <td>10</td>
-              <td><img src="{{ url_for('static', filename='person.png') }}" alt="" /> Lanz Adrian Aqueza</td>
-
-              <td><strong>CEA</strong></td>
+              <td>{{row.0}}</td>
+              <td><img src="{{ url_for('static', filename='person.png') }}" alt="" /> {{row.1 + " " + row.2}}</td>
+              <td><strong> {{row.6}} </strong></td>
             </tr>
+            {% endfor %}
+            
           </tbody>
         </table>
+
       </section>
+
     </main>
 </body>
+<script>
+  function toggleDropdown() {
+    var dropdownMenu = document.getElementById("dropdownMenu");
+    if (dropdownMenu.style.display === "block") {
+      dropdownMenu.style.display = "none";
+    } else {
+      dropdownMenu.style.display = "block";
+    }
+  }
+</script>
 
 </html>

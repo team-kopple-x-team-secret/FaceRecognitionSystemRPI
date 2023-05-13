@@ -11,7 +11,6 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@200;400&display=swap" rel="stylesheet" />
-
 </head>
 
 <body>
@@ -21,6 +20,7 @@
     <button class="button"><i class="fa fa-home"></i> Home</button>
     </a>
     -->
+
   <div class="container">
     <div class="navbar">
       <div class="logo">
@@ -30,7 +30,7 @@
         <ul>
           <li><a href="{{ url_for('views.login') }}">Logout</a></li>
           <li><a href="{{ url_for('views.aboutus') }}">About Us</a></li>
-          <li><a href="#">Camera</a></li>
+          <li><a href="{{ url_for('views.camera') }}">Camera</a></li>
           <li><a href="#">Schedule</a></li>
           <li><a href="{{ url_for('views.log') }}">Log</a></li>
           <li><a href="#">Admin</a></li>
@@ -45,6 +45,17 @@
         </ul>
       </nav>
     </div>
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert">
+      <span class="closebtn">&times;</span>
+      {{message}}
+    </div>
+
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
     <div class="sidebar">
       <div class="social-links">
         <img src="{{ url_for('static', filename='facebook.png') }}" />
@@ -55,35 +66,14 @@
 
     <main class="table">
       <section class="table__header">
-        <h1>Faculty Members</h1>
-        <div class="dropdown">
-          <button class="dropdown-toggle" onclick="toggleDropdown()">Faculty</button>
-          <div class="dropdown-menu" id="dropdownMenu">
-            <a href="{{ url_for('views.addfaculty') }}">Add Faculty Member</a>
-            <a href="#">Another action</a>
-            <a href="#">Something else here</a>
-          </div>
-        </div>
-        <div class="input-group">
 
+        <h1>Faculty Members</h1>
+
+        <div class="input-group">
           <input type="search" placeholder="Search Data..." />
           <img src="{{ url_for('static', filename='search.png') }}" alt="" />
         </div>
-        <div class="export__file">
-          <label for="export-file" class="export__file-btn" title="Export File"></label>
-          <input type="checkbox" id="export-file" />
-          <div class="export__file-options">
-            <label>Export As &nbsp; &#10140;</label>
-            <label for="export-file" id="toPDF">PDF <img src="{{ url_for('static', filename='pdf.png') }}"
-                alt="" /></label>
-            <label for="export-file" id="toJSON">JSON <img src="{{ url_for('static', filename='json.png') }}"
-                alt="" /></label>
-            <label for="export-file" id="toCSV">CSV <img src="{{ url_for('static', filename='csv.png') }}"
-                alt="" /></label>
-            <label for="export-file" id="toEXCEL">EXCEL <img src="{{ url_for('static', filename='excel.png') }}"
-                alt="" /></label>
-          </div>
-        </div>
+        <a href="{{ url_for('views.addfaculty') }}" class="my-button">Add Faculty Member</a>
       </section>
       <section class="table__body">
         <table>
@@ -94,10 +84,11 @@
                   color: #a8a394;
                 }
               </style>
+
               <th>Id <span class="icon-arrow">&UpArrow;</span></th>
               <th>Employee <span class="icon-arrow">&UpArrow;</span></th>
-
               <th>Department <span class="icon-arrow">&UpArrow;</span></th>
+              <th>Action <span class="icon-arrow">&UpArrow;</span></th>
             </tr>
           </thead>
           <tbody>
@@ -106,28 +97,137 @@
             {%for row in faculty %}
 
             <tr>
+
               <td>{{row.0}}</td>
               <td><img src="{{ url_for('static', filename='person.png') }}" alt="" /> {{row.1 + " " + row.2}}</td>
               <td><strong> {{row.6}} </strong></td>
+              <td>
+
+                <a href="/update/{{ row.0 }}" class="mybtn-edit" data-toggle="modal"
+                  data-target="#modaledit">Edit</a>
+
+                <a href="/delete/{{ row.0 }}" class="mybtn-delete"
+                  onclick="return confirm('Are You Sure to Delete?')">Delete</a>
+              </td>
             </tr>
             {% endfor %}
-            
+
           </tbody>
         </table>
 
       </section>
 
     </main>
+
 </body>
 <script>
-  function toggleDropdown() {
-    var dropdownMenu = document.getElementById("dropdownMenu");
-    if (dropdownMenu.style.display === "block") {
-      dropdownMenu.style.display = "none";
-    } else {
-      dropdownMenu.style.display = "block";
-    }
-  }
+
 </script>
+<style>
+  .my-button {
+    display: inline-block;
+    background-color: #00f514;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+  }
+
+  .my-button:hover {
+    background-color: #0062cc;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+  }
+
+  .my-button:active {
+    background-color: #005cbf;
+    box-shadow: none;
+  }
+
+  .mybtn-edit {
+    display: inline-block;
+    background-color: #ff7300;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+  }
+
+  .mybtn-edit:hover {
+    background-color: #0062cc;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+  }
+
+  .mybtn-edit:active {
+    background-color: #005cbf;
+    box-shadow: none;
+  }
+
+  .mybtn-delete {
+    display: inline-block;
+    background-color: #ff0000;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+  }
+
+  .mybtn-delete:hover {
+    background-color: #0062cc;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+  }
+
+  .mybtn-delete:active {
+    background-color: #005cbf;
+    box-shadow: none;
+  }
+
+  .alert {
+    padding: 20px;
+    background-color: #48ff00;
+    color: white;
+    margin-bottom: 15px;
+    position: relative;
+  }
+
+  .closebtn {
+    margin-left: 15px;
+    color: white;
+    font-weight: bold;
+    float: right;
+    font-size: 22px;
+    line-height: 20px;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+
+  .closebtn:hover {
+    color: black;
+  }
+</style>
+<script>
+  var alert = document.querySelector('.alert');
+
+  // Get the close button
+  var closeBtn = alert.querySelector('.closebtn');
+
+  // Add a click event listener to the close button
+  closeBtn.addEventListener('click', function () {
+    // Hide the alert message
+    alert.style.display = 'none';
+  });
+</script>
+
 
 </html>

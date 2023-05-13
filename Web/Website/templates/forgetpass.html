@@ -46,31 +46,45 @@
           <div class="header-text mb-4">
             <h2>Reset Password</h2>
           </div>
+          <form action="{{ url_for('views.forgetpass') }}" method="post">
 
-          <div class="form-floating">
-            <input type="Email Address" class="form-control" id="Email" placeholder="name@example.com" />
-            <label for="floatingInput">Email address</label>
-          </div>
-          <div class="form-floating">
-            <input type="password" class="form-control" id="Password" placeholder="Secret Password" />
-            <label for="floatingPassword">Secret Password</label>
-          </div>
-          <div class="form-floating">
-            <input type="password" class="form-control" id="NewPassword" placeholder="NewPassword" />
+            <div class="form-floating">
+              <input type="Email Address" class="form-control" id="Email" name="email" placeholder="name@example.com" required />
+              <label for="floatingInput">Email address</label>
+            </div>
+            <div class="form-floating">
+              <input type="password" class="form-control" id="Password" placeholder="Secret Key" name="secretkey" required />
+              <label for="floatingPassword">Secret Key</label>
+            </div>
+            <div class="form-floating">
+              <input type="password" class="form-control" id="NewPassword" placeholder="NewPassword" name="newpass" required />
 
-            <label for="floatingPassword">New Password</label>
-          </div>
-          <div id="password-error" style="display:none;color:red;">Passwords do not match</div>
+              <label for="floatingPassword">New Password</label>
+            </div>
+
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+            {% for message in messages %}
+            <div class="alert">
+              <span class="closebtn">&times;</span>
+              {{message}}
+            </div>
+
+            {% endfor %}
+            {% endif %}
+            {% endwith %}
+            <div class="d-grid gap-2 d-md-block">
+              <button class="btn btn-success" id="submit" type="submit" value="submit">
+                Reset
+              </button>
+
+              <a href="{{ url_for('views.login') }}" class="btn btn-secondary btn-mg active" role="button"
+                aria-pressed="true">Back</a>
           </form>
-          <div class="d-grid gap-2 d-md-block">
-            <button class="btn btn-success" id="submit" type="button">
-              Reset
-            </button>
-            <a href="{{ url_for('views.login') }}" class="btn btn-secondary btn-mg active" role="button" aria-pressed="true">Back</a>
-          </div>
         </div>
       </div>
     </div>
+  </div>
   </div>
   <script>
 

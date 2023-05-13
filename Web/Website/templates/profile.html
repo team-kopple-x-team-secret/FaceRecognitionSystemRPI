@@ -1,60 +1,58 @@
-
 <!DOCTYPE html>
 <html lang="en" title="Coding design">
-  <head>
-    
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Profile-RTU Pasig Faculty Face Recognition Based System</title>
-    <link rel="stylesheet" href="{{ url_for('static',filename='profilestyle.css') }}" />
 
-    <script src="{{ url_for('static',filename='profilescript.js') }}"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<head>
 
-    <link
-      href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@200;400&display=swap"
-      rel="stylesheet"
-    />
-  </head>
-  
-  <body>
-    <!--
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <title>Profile-RTU Pasig Faculty Face Recognition Based System</title>
+  <link rel="stylesheet" href="{{ url_for('static',filename='profilestyle.css') }}" />
+
+  <script src="{{ url_for('static',filename='profilescript.js') }}"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+  <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@200;400&display=swap" rel="stylesheet" />
+</head>
+
+<body>
+  <!--
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <a href="index.html">
     <button class="button"><i class="fa fa-home"></i> Home</button>
     </a>
     -->
-    <div class="container">
-      <div class="navbar">
-        <div class="logo">
-          <img src="{{ url_for('static', filename='rtulogo.png') }}" />
-        </div>
-        <nav>
-          <ul>
-            <li><a href="{{ url_for('views.login') }}">Logout</a></li>
-            <li><a href="{{ url_for('views.aboutus') }}">About Us</a></li>
-            <li><a href="#">Camera</a></li>
-            <li><a href="#">Schedule</a></li>
-            <li><a href="{{ url_for('views.log') }}">Log</a></li>
-            <li><a href="#">Admin</a></li>
-            <li><a href="{{ url_for('views.faculty') }}">Faculty</a></li>
-            <li><a href="{{ url_for('views.profile') }}">Profile</a></li>
-            <li><a href="{{ url_for('views.index') }}">Home</a></li>
-            
-          <li>
-              <p>Face Recognition-Based Attendance System</p></li>
-          </ul>
-        </nav>
+  <div class="container">
+    <div class="navbar">
+      <div class="logo">
+        <img src="{{ url_for('static', filename='rtulogo.png') }}" />
       </div>
-      <div class="sidebar">
-        <div class="social-links">
-          <img src="{{ url_for('static', filename='facebook.png') }}" />
+      <nav>
+        <ul>
+          <li><a href="{{ url_for('views.login') }}">Logout</a></li>
+          <li><a href="{{ url_for('views.aboutus') }}">About Us</a></li>
+          <li><a href="{{ url_for('views.camera') }}">Camera</a></li>
+          <li><a href="#">Schedule</a></li>
+          <li><a href="{{ url_for('views.log') }}">Log</a></li>
+          <li><a href="#">Admin</a></li>
+          <li><a href="{{ url_for('views.faculty') }}">Faculty</a></li>
+          <li><a href="{{ url_for('views.profile') }}">Profile</a></li>
+          <li><a href="{{ url_for('views.index') }}">Home</a></li>
+
+          <li>
+            <p>Face Recognition-Based Attendance System</p>
+          </li>
+        </ul>
+      </nav>
+    </div>
+    <div class="sidebar">
+      <div class="social-links">
+        <img src="{{ url_for('static', filename='facebook.png') }}" />
         <img src="{{ url_for('static', filename='gmail.png') }}" />
         <img src="{{ url_for('static', filename='phone.png') }}" />
-        </div>
       </div>
+    </div>
 
     <main class="table">
       <section class="table__header">
@@ -64,26 +62,18 @@
           <img src="{{ url_for('static', filename='search.png') }}" alt="" />
         </div>
         <div class="export__file">
-          <label
-            for="export-file"
-            class="export__file-btn"
-            title="Export File"
-          ></label>
+          <label for="export-file" class="export__file-btn" title="Export File"></label>
           <input type="checkbox" id="export-file" />
           <div class="export__file-options">
             <label>Export As &nbsp; &#10140;</label>
-            <label for="export-file" id="toPDF"
-              >PDF <img src="{{ url_for('static', filename='rtulogo.png') }}" alt=""
-            /></label>
-            <label for="export-file" id="toJSON"
-              >JSON <img src="{{ url_for('static', filename='json.png') }}" alt=""
-            /></label>
-            <label for="export-file" id="toCSV"
-              >CSV <img src="{{ url_for('static', filename='csv.png') }}" alt=""
-            /></label>
-            <label for="export-file" id="toEXCEL"
-              >EXCEL <img src="{{ url_for('static', filename='excel.png') }}" alt=""
-            /></label>
+            <label for="export-file" id="toPDF">PDF <img src="{{ url_for('static', filename='rtulogo.png') }}"
+                alt="" /></label>
+            <label for="export-file" id="toJSON">JSON <img src="{{ url_for('static', filename='json.png') }}"
+                alt="" /></label>
+            <label for="export-file" id="toCSV">CSV <img src="{{ url_for('static', filename='csv.png') }}"
+                alt="" /></label>
+            <label for="export-file" id="toEXCEL">EXCEL <img src="{{ url_for('static', filename='excel.png') }}"
+                alt="" /></label>
           </div>
         </div>
       </section>
@@ -114,15 +104,20 @@
               <td>{{row.3}}</td>
               <td>{{row.4}}</td>
               <td>
+                {% if row.5 == 'Present'%}
                 <p class="status present">{{row.5}}</p>
+                {% else %}
+                <p class="status absent">{{row.5}}</p>
+                {% endif %}
               </td>
               <td><strong> {{row.6}} </strong></td>
             </tr>
             {% endfor %}
-            
+
           </tbody>
         </table>
       </section>
     </main>
-  </body>
+</body>
+
 </html>

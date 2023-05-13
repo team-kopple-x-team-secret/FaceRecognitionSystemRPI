@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, redirect, request, session, url_for
+from flask import Blueprint, render_template, redirect, request, session, url_for, flash
 import mysql.connector
 
 views = Blueprint(__name__, "views")
@@ -28,7 +28,7 @@ def login():
             session["password"] = record[4]
             return redirect(url_for("views.index"))
         else:
-            print("Incorrect Info")
+            flash("Incorrect Email or Password!")
     return render_template("login.html")
 
 
@@ -50,7 +50,7 @@ def profile():
     cursor.execute("SELECT * FROM faculty")
     data = cursor.fetchall()
     cursor.close()
-    return render_template("profile.html", faculty = data)
+    return render_template("profile.html", faculty=data)
 
 
 @views.route("/faculty")
@@ -67,12 +67,24 @@ def faculty():
     data = cursor.fetchall()
     cursor.close()
 
-    return render_template("faculty.html", faculty = data)
+    return render_template("faculty.html", faculty=data)
 
 
 @views.route("/log")
 def log():
-    return render_template("log.html")
+    conn = mysql.connector.connect(
+        host="127.0.0.1",
+        port="3306",
+        password="1234",
+        user="root",
+        database="databasee",
+    )
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM log")
+    data = cursor.fetchall()
+    cursor.close()
+
+    return render_template("log.html", log=data)
 
 
 @views.route("/aboutus")
@@ -85,8 +97,44 @@ def addfaculty():
     return render_template("addfaculty.html")
 
 
-@views.route("/forgetpass")
+@views.route("/forgetpass", methods=["GET", "POST"])
 def forgetpass():
+    conn = mysql.connector.connect(
+        host="127.0.0.1",
+        port="3306",
+        password="1234",
+        user="root",
+        database="databasee",
+    )
+    if request.method == "POST":
+        email1 = request.form["email"]
+        secretkey1 = request.form["secretkey"]
+        newpass = request.form["newpass"]
+        cursor = conn.cursor()
+        cursor.execute(
+            "SELECT * FROM databasee.users WHERE Email= %s AND Secret_Key= %s",
+            (email1, secretkey1),
+        )
+        record = cursor.fetchone()
+        if record:
+            session["loggedin"] = True
+            session["email"] = record[1]
+            session["secretkey"] = record[5]
+
+            cursor1 = conn.cursor()
+            cursor1.execute(
+                "UPDATE users SET User_Pass=%s WHERE Email=%s", (newpass, email1)
+            )
+            conn.commit()
+            cursor.close()
+            conn.close()
+
+            flash("Reset Successfully!")
+
+            return redirect(url_for("views.login"))
+
+        else:
+            flash("Incorrect Secret Key!")
     return render_template("forgetpass.html")
 
 
@@ -112,6 +160,65 @@ def insert():
             (firstname, lastname, address, birthday, status, Department),
         )
         conn.commit()
+        flash("Successfully Added")
         return redirect(url_for("views.faculty"))
 
     return render_template("addfaculty.html")
+
+
+@views.route("/camera")
+def camera():
+    return render_template("camera.html")
+
+
+@views.route("/delete/<string:id_data>", methods=["GET"])
+def delete(id_data):
+    flash("Record has been Deleted")
+    conn = mysql.connector.connect(
+        host="127.0.0.1",
+        port="3306",
+        password="1234",
+        user="root",
+        database="databasee",
+    )
+    cursor = conn.cursor()
+    cursor.execute("DELETE FROM faculty WHERE ID= %s" % (id_data))
+    conn.commit()
+    return redirect(url_for("views.faculty"))
+
+
+@views.route("/update/<string:id_data>", methods=["GET", "POST"])
+def update(id_data):
+    return render_template("updatefaculty.html", id=id_data)
+
+
+@views.route("/updated/", methods=["GET", "POST"])
+def updated():
+    conn = mysql.connector.connect(
+        host="127.0.0.1",
+        port="3306",
+        password="1234",
+        user="root",
+        database="databasee",
+    )
+    if request.method == "POST":
+        id1 = request.form["pota"]
+        firstname = request.form["fname"]
+        lastname = request.form["lname"]
+        address = request.form["address"]
+        birthday = request.form["birthday"]
+        status = "Absent"
+        Department = request.form["department"]
+        cursor = conn.cursor()
+
+        cursor.execute(
+            "UPDATE faculty SET First_name=%s, Last_name=%s, Address=%s, Birthday=%s, Status=%s, Department=%s WHERE ID=%s",
+            (firstname, lastname, address, birthday, status, Department, id1),
+        )
+        conn.commit()
+        cursor.close()
+        conn.close()
+
+        flash("Edit Successfully!")
+
+        return redirect(url_for("views.faculty"))

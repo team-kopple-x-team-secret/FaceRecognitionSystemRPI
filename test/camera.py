@@ -27,7 +27,7 @@ cap.set(cv2.CAP_PROP_FPS, 15)
 cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
 cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
 
-scanned_users = {}
+scanned_users = set()  # Use a set instead of a dictionary to store scanned users
 
 while True:
     ret, frame = cap.read()
@@ -44,38 +44,40 @@ while True:
             first_match_index = matches.index(True)
             name = studentIds[first_match_index]
 
-            if name != "Unknown":
-                # Check if the user has already been scanned in the current session
-                if name not in scanned_users:
-                    # Get the current date and time
-                    current_datetime = datetime.datetime.now()
-                    current_date = current_datetime.date()
-                    current_time = current_datetime.time()
+        if name != "Unknown":
+            # Check if the user ID has already been scanned in the current session
+            if name not in scanned_users:
+                # Get the current date and time
+                current_datetime = datetime.datetime.now()
+                current_date = current_datetime.date()
+                current_time = current_datetime.time()
 
-                    try:
-                        cursor = conn.cursor()
-                        query = "SELECT ID, First_name, Last_name FROM log WHERE ID = %s"
-                        cursor.execute(query, (name,))
-                        results = cursor.fetchall()
+                try:
+                    cursor = conn.cursor()
+                    query = "SELECT ID, First_name, Last_name, Department FROM log WHERE ID = %s"
+                    cursor.execute(query, (name,))
+                    results = cursor.fetchall()
 
+                    if not results:
+                        print("User details not found in the database.")
+                    else:
                         for result in results:
-                            user_id, first_name, last_name = result
-                            # Insert the log into the database
-                            query = "INSERT INTO `log` (`ID`, `Datee`, `TimeIn`, `First_name`, `Last_name`) VALUES (%s, %s, %s, %s, %s)"
-                            values = (user_id, current_date, current_time, first_name, last_name)
-                            cursor.execute(query, values)
-                            conn.commit()
+                            user_id, first_name, last_name, department = result
 
-                        if not results:
-                            print("User details not found in the database.")
+                        # Insert the log into the database
+                        query = "INSERT INTO `log` (`ID`, `Datee`, `TimeIn`, `First_name`, `Last_name`, `Department`) VALUES (%s, %s, %s, %s, %s, %s)"
+                        values = (user_id, current_date, current_time, first_name, last_name, department,)
+                        cursor.execute(query, values)
+                        conn.commit()
 
-                        # Add the user to the scanned users dictionary
-                        scanned_users[name] = True
+                        # Add the user ID to the scanned users set
+                        scanned_users.add(name)
 
-                        cursor.close()
+                    cursor.close()
 
-                    except mysql.connector.Error as error:
-                        print("Error occurred while executing MySQL operation:", error)
+                except mysql.connector.Error as error:
+                    print("Error occurred while executing MySQL operation:", error)
+
 
         # Draw a box around the face and show the name
         cv2.rectangle(frame, (left, top), (right, bottom), (0, 0, 255), 2)

@@ -1,4 +1,5 @@
 from flask import Blueprint, render_template, redirect, request, session, url_for, flash
+import datetime
 import mysql.connector
 
 views = Blueprint(__name__, "views")
@@ -9,7 +10,7 @@ def login():
     conn = mysql.connector.connect(
         host="127.0.0.1",
         port="3306",
-        password="1234",
+        password="1974",
         user="root",
         database="databasee",
     )
@@ -25,7 +26,7 @@ def login():
         if record:
             session["loggedin"] = True
             session["email"] = record[1]
-            session["password"] = record[4]
+            session["password"] = record[2]
             return redirect(url_for("views.index"))
         else:
             flash("Incorrect Email or Password!")
@@ -42,10 +43,11 @@ def profile():
     conn = mysql.connector.connect(
         host="127.0.0.1",
         port="3306",
-        password="1234",
+        password="1974",
         user="root",
         database="databasee",
     )
+
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM faculty")
     data = cursor.fetchall()
@@ -58,7 +60,7 @@ def faculty():
     conn = mysql.connector.connect(
         host="127.0.0.1",
         port="3306",
-        password="1234",
+        password="1974",
         user="root",
         database="databasee",
     )
@@ -75,7 +77,7 @@ def log():
     conn = mysql.connector.connect(
         host="127.0.0.1",
         port="3306",
-        password="1234",
+        password="1974",
         user="root",
         database="databasee",
     )
@@ -102,7 +104,7 @@ def forgetpass():
     conn = mysql.connector.connect(
         host="127.0.0.1",
         port="3306",
-        password="1234",
+        password="1974",
         user="root",
         database="databasee",
     )
@@ -119,11 +121,12 @@ def forgetpass():
         if record:
             session["loggedin"] = True
             session["email"] = record[1]
-            session["secretkey"] = record[5]
+            session["secretkey"] = record[3]
 
             cursor1 = conn.cursor()
             cursor1.execute(
-                "UPDATE users SET User_Pass=%s WHERE Email=%s", (newpass, email1)
+                "UPDATE users SET User_Pass=%s WHERE Email=%s", (
+                    newpass, email1)
             )
             conn.commit()
             cursor.close()
@@ -143,7 +146,7 @@ def insert():
     conn = mysql.connector.connect(
         host="127.0.0.1",
         port="3306",
-        password="1234",
+        password="1974",
         user="root",
         database="databasee",
     )
@@ -177,7 +180,7 @@ def delete(id_data):
     conn = mysql.connector.connect(
         host="127.0.0.1",
         port="3306",
-        password="1234",
+        password="1974",
         user="root",
         database="databasee",
     )
@@ -187,9 +190,9 @@ def delete(id_data):
     return redirect(url_for("views.faculty"))
 
 
-@views.route("/update/<string:id_data>", methods=["GET", "POST"])
-def update(id_data):
-    return render_template("updatefaculty.html", id=id_data)
+@views.route("/update/<string:id_data>/<string:fname_data>/<string:lname_data>", methods=["GET", "POST"])
+def update(id_data, fname_data, lname_data):
+    return render_template("updatefaculty.html", id=id_data, fname=fname_data, lname=lname_data)
 
 
 @views.route("/updated/", methods=["GET", "POST"])
@@ -197,7 +200,7 @@ def updated():
     conn = mysql.connector.connect(
         host="127.0.0.1",
         port="3306",
-        password="1234",
+        password="1974",
         user="root",
         database="databasee",
     )
@@ -222,3 +225,73 @@ def updated():
         flash("Edit Successfully!")
 
         return redirect(url_for("views.faculty"))
+
+
+@views.route("/UpdateProfile")
+def UpdateProfile():
+    conn = mysql.connector.connect(
+        host="127.0.0.1",
+        port="3306",
+        password="1974",
+        user="root",
+        database="databasee",
+    )
+
+    return redirect(url_for("views.profile"))
+
+
+@views.route("/admin")
+def admin():
+
+    return render_template("Admin.html")
+
+@views.route("/adminchanged", methods=["GET", "POST"])
+def adminchanged():
+
+    conn = mysql.connector.connect(
+        host="127.0.0.1",
+        port="3306",
+        password="1974",
+        user="root",
+        database="databasee",
+    )
+    if request.method == "POST":
+
+        currentpass = request.form["currentpass"]
+        newpass = request.form["password"]
+        confirmpass = request.form["confirmpass"]
+
+        if newpass == confirmpass:
+            cursor = conn.cursor()
+            cursor.execute(
+            "SELECT * FROM databasee.users WHERE ID=%s AND User_Pass= %s",
+            ("1", currentpass),
+            )
+            record = cursor.fetchone()
+            if record:
+                session["loggedin"] = True
+                session["ID"] = record[0]
+                session["User_Pass"] = record[2]
+
+                cursor1 = conn.cursor()
+                cursor1.execute(
+                "UPDATE users SET User_Pass=%s WHERE ID=%s", (
+                    newpass, "1")
+                )
+                conn.commit()
+                cursor.close()
+                conn.close()
+
+                flash("Change Successfully!")
+                return redirect(url_for("views.admin"))
+            else:
+                flash("Incorrect Password!")
+        else:
+            flash("Password not match!")
+
+    return render_template("Admin.html")
+
+@views.route("/schedule")
+def schedule():
+    
+    return render_template("schedule.html")

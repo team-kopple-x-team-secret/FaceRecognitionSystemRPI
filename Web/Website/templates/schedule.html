@@ -52,61 +52,20 @@
 
         <main class="table">
             <section class="table__header">
-                <h1>Camera</h1>
-                <div class="button-container">
-                    <a href="#" class="my-button">Camera 1</a>
-                    <a href="#" class="my-button">Camera 2</a>
-                </div>
+                <h1>Schedule</h1>
+                
 
             </section>
 
-            <video id="video" width="400" height="400" autoplay></video>
+            
 
         </main>
 </body>
 <style>
-    .my-button {
-        display: inline-block;
-        background-color: #00f514;
-        color: white;
-        border: none;
-        padding: 10px 20px;
-        font-size: 16px;
-        border-radius: 5px;
-        cursor: pointer;
-        text-decoration: none;
-        box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
-    }
-
-    .my-button:hover {
-        background-color: #0062cc;
-        box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
-    }
-
-    .my-button:active {
-        background-color: #005cbf;
-        box-shadow: none;
-    }
-
-    .button-container {
-        text-align: right;
-    }
-
-    .button-container button {
-        float: right;
-        margin-left: 10px;
-    }
+    
 </style>
 <script>
-    navigator.mediaDevices.getUserMedia({ video: true })
-        .then(function (stream) {
-            var video = document.querySelector('#video');
-            video.srcObject = stream;
-            video.play();
-        })
-        .catch(function (err) {
-            console.log('Error: ' + err);
-        });
+    
 </script>
 
 </html>

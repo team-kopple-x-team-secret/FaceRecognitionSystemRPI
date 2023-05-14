@@ -31,13 +31,13 @@
           <li><a href="{{ url_for('views.login') }}">Logout</a></li>
           <li><a href="{{ url_for('views.aboutus') }}">About Us</a></li>
           <li><a href="{{ url_for('views.camera') }}">Camera</a></li>
-          <li><a href="#">Schedule</a></li>
+          <li><a href="{{ url_for('views.schedule') }}">Schedule</a></li>
           <li><a href="{{ url_for('views.log') }}">Log</a></li>
-          <li><a href="#">Admin</a></li>
+          <li><a href="{{ url_for('views.admin') }}">Admin</a></li>
 
           <li><a href="{{ url_for('views.faculty') }}">Faculty</a></li>
 
-          <li><a href="{{ url_for('views.profile') }}">Profile</a></li>
+          <li><a href="{{ url_for('views.UpdateProfile') }}">Profile</a></li>
           <li><a href="{{ url_for('views.index') }}">Home</a></li>
           <li>
             <p>Face Recognition-Based Attendance System</p>
@@ -103,7 +103,7 @@
               <td><strong> {{row.6}} </strong></td>
               <td>
 
-                <a href="/update/{{ row.0 }}" class="mybtn-edit" data-toggle="modal"
+                <a href="/update/{{ row.0 }}/{{ row.1 }}/{{ row.2 }}" class="mybtn-edit" data-toggle="modal"
                   data-target="#modaledit">Edit</a>
 
                 <a href="/delete/{{ row.0 }}" class="mybtn-delete"

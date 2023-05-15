@@ -337,3 +337,23 @@ def searchlog():
         cursor.execute(query)
         results = cursor.fetchall()
     return render_template("searchlog.html", results=results)
+
+@views.route("/searchfaculty", methods=["GET", "POST"])
+def searchfaculty():
+    conn = mysql.connector.connect(
+        host="127.0.0.1",
+        port="3306",
+        password="1234",
+        user="root",
+        database="databasee",
+    )
+    if request.method == "POST":
+        search_text = request.form["searched"]
+        query = "SELECT * FROM faculty WHERE First_name LIKE '%{}%' OR Last_name LIKE '%{}%' OR ID LIKE '%{}%'".format(
+            search_text, search_text, search_text
+        )
+        cursor = conn.cursor()
+        cursor.execute(query)
+        results = cursor.fetchall()
+    return render_template("searchfaculty.html", results=results)
+

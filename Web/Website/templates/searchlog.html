@@ -70,7 +70,8 @@
         </div>
 
         <form form action="{{ url_for('views.searchlog')}}" method="post">
-          <input class="input" type="input" placeholder="Search Data..." name="searched" />
+
+          <input class="input" type="search" placeholder="Search Data..." name="searched" />
           <button class="btn btn-success" id="submit" type="submit" value="submit">
             Search
           </button>
@@ -99,7 +100,8 @@
             </tr>
           </thead>
           <tbody>
-            {%for row in log %}
+
+            {%for row in results %}
             <tr>
               <td>{{row.0}}</td>
               <td><img src="{{ url_for('static', filename='person.png') }}" alt="" />{{row.1 +" "+row.2}}</td>

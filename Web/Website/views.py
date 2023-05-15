@@ -308,9 +308,32 @@ def attendanceprofile(id_data, lname_data):
         database="databasee",
     )
     cursor = conn.cursor()
-    cursor.execute("SELECT * FROM log WHERE ID=%s ORDER BY Datee DESC"% (id_data))
+    cursor.execute("SELECT * FROM log WHERE ID=%s ORDER BY Datee DESC" % (id_data))
     data = cursor.fetchall()
     cursor.close()
+    return render_template(
+        "attendanceprofile.html",
+        id=id_data,
+        lname=lname_data,
+        profilerecord=data,
+    )
 
 
-    return render_template("attendanceprofile.html", id=id_data, lname=lname_data, profilerecord = data,)
+@views.route("/searchlog", methods=["GET", "POST"])
+def searchlog():
+    conn = mysql.connector.connect(
+        host="127.0.0.1",
+        port="3306",
+        password="1234",
+        user="root",
+        database="databasee",
+    )
+    if request.method == "POST":
+        search_text = request.form["searched"]
+        query = "SELECT * FROM log WHERE First_name LIKE '%{}%' OR Last_name LIKE '%{}%' OR ID LIKE '%{}%'".format(
+            search_text, search_text, search_text
+        )
+        cursor = conn.cursor()
+        cursor.execute(query)
+        results = cursor.fetchall()
+    return render_template("searchlog.html", results=results)

@@ -56,11 +56,8 @@
 
     <main class="table">
       <section class="table__header">
+        
         <h1>Employees (Profile)</h1>
-        <div class="input-group">
-          <input type="search" placeholder="Search Data..." />
-          <img src="{{ url_for('static', filename='search.png') }}" alt="" />
-        </div>
         <div class="export__file">
           <label for="export-file" class="export__file-btn" title="Export File"></label>
           <input type="checkbox" id="export-file" />
@@ -76,6 +73,11 @@
                 alt="" /></label>
           </div>
         </div>
+        <div class="input-group">
+          <input type="search" placeholder="Search Data..." />
+          <img src="{{ url_for('static', filename='search.png') }}" alt="" />
+        </div>
+        
       </section>
       <section class="table__body">
         <table>
@@ -90,8 +92,8 @@
               <th>Employee <span class="icon-arrow">&UpArrow;</span></th>
               <th>Location <span class="icon-arrow">&UpArrow;</span></th>
               <th>Birthday <span class="icon-arrow">&UpArrow;</span></th>
-              <th>Status <span class="icon-arrow">&UpArrow;</span></th>
               <th>Department <span class="icon-arrow">&UpArrow;</span></th>
+              <th>Record <span class="icon-arrow">&UpArrow;</span></th>
             </tr>
           </thead>
           <tbody>
@@ -103,14 +105,8 @@
               <td><img src="{{ url_for('static', filename='person.png') }}" alt="" />{{row.1 +" "+ row.2}}</td>
               <td>{{row.3}}</td>
               <td>{{row.4}}</td>
-              <td>
-                {% if row.5 == 'Present'%}
-                <p class="status present">{{row.5}}</p>
-                {% else %}
-                <p class="status absent">{{row.5}}</p>
-                {% endif %}
-              </td>
               <td><strong> {{row.6}} </strong></td>
+              <td><a href="/attendanceprofile/{{ row.0 }}/{{ row.2 }}" class="mybtn-record">View</a></td>
             </tr>
             {% endfor %}
 
@@ -118,6 +114,30 @@
         </table>
       </section>
     </main>
+    <style>
+      .mybtn-record {
+        display: inline-block;
+        background-color: #093ff0;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        font-size: 16px;
+        border-radius: 5px;
+        cursor: pointer;
+        text-decoration: none;
+        box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+      }
+
+      .mybtn-record:hover {
+        background-color: #0062cc;
+        box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+      }
+
+      .mybtn-record:active {
+        background-color: #005cbf;
+        box-shadow: none;
+      }
+    </style>
 </body>
 
 </html>

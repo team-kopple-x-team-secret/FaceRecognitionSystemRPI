@@ -10,7 +10,7 @@ def login():
     conn = mysql.connector.connect(
         host="127.0.0.1",
         port="3306",
-        password="1974",
+        password="1234",
         user="root",
         database="databasee",
     )
@@ -43,7 +43,7 @@ def profile():
     conn = mysql.connector.connect(
         host="127.0.0.1",
         port="3306",
-        password="1974",
+        password="1234",
         user="root",
         database="databasee",
     )
@@ -60,7 +60,7 @@ def faculty():
     conn = mysql.connector.connect(
         host="127.0.0.1",
         port="3306",
-        password="1974",
+        password="1234",
         user="root",
         database="databasee",
     )
@@ -77,12 +77,12 @@ def log():
     conn = mysql.connector.connect(
         host="127.0.0.1",
         port="3306",
-        password="1974",
+        password="1234",
         user="root",
         database="databasee",
     )
     cursor = conn.cursor()
-    cursor.execute("SELECT * FROM log")
+    cursor.execute("SELECT * FROM log ORDER BY Datee DESC")
     data = cursor.fetchall()
     cursor.close()
 
@@ -104,7 +104,7 @@ def forgetpass():
     conn = mysql.connector.connect(
         host="127.0.0.1",
         port="3306",
-        password="1974",
+        password="1234",
         user="root",
         database="databasee",
     )
@@ -125,8 +125,7 @@ def forgetpass():
 
             cursor1 = conn.cursor()
             cursor1.execute(
-                "UPDATE users SET User_Pass=%s WHERE Email=%s", (
-                    newpass, email1)
+                "UPDATE users SET User_Pass=%s WHERE Email=%s", (newpass, email1)
             )
             conn.commit()
             cursor.close()
@@ -146,7 +145,7 @@ def insert():
     conn = mysql.connector.connect(
         host="127.0.0.1",
         port="3306",
-        password="1974",
+        password="1234",
         user="root",
         database="databasee",
     )
@@ -180,7 +179,7 @@ def delete(id_data):
     conn = mysql.connector.connect(
         host="127.0.0.1",
         port="3306",
-        password="1974",
+        password="1234",
         user="root",
         database="databasee",
     )
@@ -190,9 +189,14 @@ def delete(id_data):
     return redirect(url_for("views.faculty"))
 
 
-@views.route("/update/<string:id_data>/<string:fname_data>/<string:lname_data>", methods=["GET", "POST"])
+@views.route(
+    "/update/<string:id_data>/<string:fname_data>/<string:lname_data>",
+    methods=["GET", "POST"],
+)
 def update(id_data, fname_data, lname_data):
-    return render_template("updatefaculty.html", id=id_data, fname=fname_data, lname=lname_data)
+    return render_template(
+        "updatefaculty.html", id=id_data, fname=fname_data, lname=lname_data
+    )
 
 
 @views.route("/updated/", methods=["GET", "POST"])
@@ -200,7 +204,7 @@ def updated():
     conn = mysql.connector.connect(
         host="127.0.0.1",
         port="3306",
-        password="1974",
+        password="1234",
         user="root",
         database="databasee",
     )
@@ -232,7 +236,7 @@ def UpdateProfile():
     conn = mysql.connector.connect(
         host="127.0.0.1",
         port="3306",
-        password="1974",
+        password="1234",
         user="root",
         database="databasee",
     )
@@ -242,21 +246,19 @@ def UpdateProfile():
 
 @views.route("/admin")
 def admin():
-
     return render_template("Admin.html")
+
 
 @views.route("/adminchanged", methods=["GET", "POST"])
 def adminchanged():
-
     conn = mysql.connector.connect(
         host="127.0.0.1",
         port="3306",
-        password="1974",
+        password="1234",
         user="root",
         database="databasee",
     )
     if request.method == "POST":
-
         currentpass = request.form["currentpass"]
         newpass = request.form["password"]
         confirmpass = request.form["confirmpass"]
@@ -264,8 +266,8 @@ def adminchanged():
         if newpass == confirmpass:
             cursor = conn.cursor()
             cursor.execute(
-            "SELECT * FROM databasee.users WHERE ID=%s AND User_Pass= %s",
-            ("1", currentpass),
+                "SELECT * FROM databasee.users WHERE ID=%s AND User_Pass= %s",
+                ("1", currentpass),
             )
             record = cursor.fetchone()
             if record:
@@ -275,8 +277,7 @@ def adminchanged():
 
                 cursor1 = conn.cursor()
                 cursor1.execute(
-                "UPDATE users SET User_Pass=%s WHERE ID=%s", (
-                    newpass, "1")
+                    "UPDATE users SET User_Pass=%s WHERE ID=%s", (newpass, "1")
                 )
                 conn.commit()
                 cursor.close()
@@ -291,7 +292,25 @@ def adminchanged():
 
     return render_template("Admin.html")
 
+
 @views.route("/schedule")
 def schedule():
-    
     return render_template("schedule.html")
+
+
+@views.route("/attendanceprofile/<string:id_data>/<string:lname_data>")
+def attendanceprofile(id_data, lname_data):
+    conn = mysql.connector.connect(
+        host="127.0.0.1",
+        port="3306",
+        password="1234",
+        user="root",
+        database="databasee",
+    )
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM log WHERE ID=%s ORDER BY Datee DESC"% (id_data))
+    data = cursor.fetchall()
+    cursor.close()
+
+
+    return render_template("attendanceprofile.html", id=id_data, lname=lname_data, profilerecord = data,)

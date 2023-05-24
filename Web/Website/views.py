@@ -140,10 +140,10 @@ def aboutus():
     return render_template("aboutus.html", type=type, email=email)
 
 
-@views.route("/addfaculty")
+@views.route("/adduser")
 @login_required
-def addfaculty():
-    return render_template("addfaculty.html")
+def adduser():
+    return render_template("adduser.html")
 
 
 @views.route("/forgetpass", methods=["GET", "POST"])
@@ -194,23 +194,31 @@ def insert():
         user="root",
         database="databasee",
     )
+
     if request.method == "POST":
+        email = request.form["email"]
         firstname = request.form["fname"]
         lastname = request.form["lname"]
-        address = request.form["address"]
-        birthday = request.form["birthday"]
-        status = "Absent"
-        Department = request.form["department"]
-        cursor = conn.cursor()
-        cursor.execute(
-            "INSERT INTO faculty (First_name,Last_name,Address,Birthday,Status,Department) Values (%s,%s,%s,%s,%s,%s)",
-            (firstname, lastname, address, birthday, status, Department),
-        )
+        password = request.form["password"]
+        Secretkey = request.form["secretkey"]
+
+        cursor1 = conn.cursor()
+        cursor1.execute("SELECT * FROM databasee.users WHERE Email = %s", (email,))
+        record = cursor1.fetchone()
+        if record:
+            flash("Email Already Exist")
+            return redirect(url_for("views.adduser"))
+        else:
+            cursor = conn.cursor()
+            cursor.execute(
+                "INSERT INTO databasee.users (Email,First_name,Last_name,User_Pass,Secret_Key,Type) Values (%s,%s,%s,%s,%s,%s)",
+                (email, firstname, lastname, password, Secretkey, "Guard"),
+            )
         conn.commit()
         flash("Successfully Added")
-        return redirect(url_for("views.faculty"))
+        return redirect(url_for("views.admin"))
 
-    return render_template("addfaculty.html")
+    return render_template("adduser.html")
 
 
 @views.route("/delete/<string:id_data>", methods=["GET"])

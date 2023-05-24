@@ -49,11 +49,18 @@
                     </div>
 
 
-                    <form action="{{ url_for('views.insert') }}" method="post">
+                    <form action="{{ url_for('views.insertcheckin') }}" method="post">
                         <div class="form-floating">
                             <input type="ID" class="form-control" id="id" placeholder="ID" name="id" required />
                             <label for="floatingInput">ID</label>
                         </div>
+
+                        <div class="form-floating">
+                            <input type="firstname" class="form-control" id="firstname" placeholder="firstname"
+                                name="fname" required />
+                            <label for="floatingInput">First name</label>
+                        </div>
+
                         <div class="form-floating">
                             <input type="lastname" class="form-control" id="lastname" placeholder="lastname"
                                 name="lname" required />
@@ -65,6 +72,25 @@
                                 name="department" required />
                             <label for="floatingPassword">Department</label>
                         </div>
+                        {% with messages = get_flashed_messages() %}
+                        {% if messages %}
+                        {% for message in messages %}
+                        {% if messages == "Successfully Added"%}
+                        <div class="green-alert">
+                            <span class="closebtn">&times;</span>
+                            {{message}}
+                        </div>
+                        {% else %}
+                        <div class="alert">
+                            <span class="closebtn">&times;</span>
+                            {{message}}
+                        </div>
+
+                        {% endif %}
+
+                        {% endfor %}
+                        {% endif %}
+                        {% endwith %}
 
                         <div class="d-grid gap-2 d-md-block">
                             <button class="btn btn-success" id="submit" type="submit" value="submit">
@@ -84,32 +110,58 @@
 
 </body>
 <style>
-    input[type="date"]::-webkit-inner-spin-button,
-    input[type="date"]::-webkit-calendar-picker-indicator {
-        display: none;
-        -webkit-appearance: none;
+    .green-alert {
+        padding: 20px;
+        background-color: #0bcf0b;
+        color: white;
+        margin-bottom: 15px;
+        position: relative;
+    }
+
+    .alert {
+        padding: 20px;
+        background-color: #f44336;
+        color: white;
+        margin-bottom: 15px;
+        position: relative;
+    }
+
+    .closebtn {
+        margin-left: 15px;
+        color: white;
+        font-weight: bold;
+        float: right;
+        font-size: 22px;
+        line-height: 20px;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    .closebtn:hover {
+        color: black;
     }
 </style>
 <script>
-    var datePicker = document.getElementById("datepicker");
+    var alert = document.querySelector('.alert');
 
-    // Set default date
-    var today = new Date();
-    var day = today.getDate();
-    var month = today.getMonth() + 1;
-    var year = today.getFullYear();
-    if (day < 10) {
-        day = "0" + day;
-    }
-    if (month < 10) {
-        month = "0" + month;
-    }
-    var defaultDate = year + "-" + month + "-" + day;
-    datePicker.value = defaultDate;
+    // Get the close button
+    var closeBtn = alert.querySelector('.closebtn');
 
-    // Add date picker functionality
-    datePicker.addEventListener("click", function () {
-        datePicker.type = "date";
+    // Add a click event listener to the close button
+    closeBtn.addEventListener('click', function () {
+        // Hide the alert message
+        alert.style.display = 'none';
+    });
+
+    var greenalert = document.querySelector('.green-alert');
+
+    // Get the close button
+    var closeBtn = greenalert.querySelector('.closebtn');
+
+    // Add a click event listener to the close button
+    closeBtn.addEventListener('click', function () {
+        // Hide the alert message
+        greenalert.style.display = 'none';
     });
 
 </script>

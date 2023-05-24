@@ -1,6 +1,6 @@
 from functools import wraps
 from flask import Blueprint, render_template, redirect, request, session, url_for, flash
-import datetime
+from datetime import datetime
 import mysql.connector
 
 views = Blueprint(__name__, "views")
@@ -482,6 +482,7 @@ def logout():
 
 
 @views.route("/changepass")
+@login_required
 def changepass():
     email = session.get("email")
     type = session.get("type")
@@ -489,5 +490,69 @@ def changepass():
 
 
 @views.route("/facultycheckin")
+@login_required
 def facultycheckin():
-    return render_template("facultycheckin")
+    return render_template("facultycheckin.html")
+
+
+@views.route("insertcheckin", methods=["GET", "POST"])
+@login_required
+def insertcheckin():
+    conn = mysql.connector.connect(
+        host="127.0.0.1",
+        port="3306",
+        password="1234",
+        user="root",
+        database="databasee",
+    )
+
+    if request.method == "POST":
+        ID = request.form["id"]
+        lastname = request.form["lname"]
+        firstname = request.form["fname"]
+        Department = request.form["department"]
+
+        cursor1 = conn.cursor()
+        cursor1.execute(
+            "SELECT * FROM databasee.faculty WHERE ID = %s AND Last_name = %s AND Department = %s",
+            (ID, lastname, Department),
+        )
+        record1 = cursor1.fetchone()
+
+        if record1:
+            cursor2 = conn.cursor()
+            cursor2.execute(
+                "SELECT * FROM databasee.log WHERE ID = %s AND Last_name = %s AND Department = %s AND Datee= %s",
+                (ID, lastname, Department, datetime.now().date()),
+            )
+            record2 = cursor2.fetchone()
+            if record2:
+                print("User already Checkin")
+                cursor4 = conn.cursor()
+                cursor4.execute(
+                    "UPDATE databasee.log SET TimeOut=%s WHERE ID=%s",
+                    (datetime.now().time(), ID),
+                )
+                conn.commit()
+
+            else:
+                cursor3 = conn.cursor()
+                cursor3.execute(
+                    "INSERT INTO databasee.log (ID,First_name,Last_name,TimeIn,TimeOut,Department,Datee) Values (%s,%s,%s,%s,%s,%s,%s)",
+                    (
+                        ID,
+                        firstname,
+                        lastname,
+                        datetime.now().time(),
+                        "",
+                        Department,
+                        datetime.now().date(),
+                    ),
+                )
+            conn.commit()
+            flash("Successfully Added")
+            return redirect(url_for("views.facultycheckin"))
+        else:
+            flash("Information Doesnt Exist")
+
+    return render_template("facultycheckin.html")

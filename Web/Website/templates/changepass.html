@@ -71,10 +71,19 @@
                         {% with messages = get_flashed_messages() %}
                         {% if messages %}
                         {% for message in messages %}
+                        {% if messages == "Successfully Added"%}
+                        <div class="green-alert">
+                            <span class="closebtn">&times;</span>
+                            {{message}}
+                        </div>
+                        {% else %}
                         <div class="alert">
                             <span class="closebtn">&times;</span>
                             {{message}}
                         </div>
+
+                        {% endif %}
+
                         {% endfor %}
                         {% endif %}
                         {% endwith %}
@@ -131,8 +140,28 @@
             // Hide the alert message
             alert.style.display = 'none';
         });
+
+        var greenalert = document.querySelector('.green-alert');
+
+        // Get the close button
+        var closeBtn = greenalert.querySelector('.closebtn');
+
+        // Add a click event listener to the close button
+        closeBtn.addEventListener('click', function () {
+            // Hide the alert message
+            greenalert.style.display = 'none';
+        });
     </script>
     <style>
+        .green-alert
+        {
+            padding: 20px;
+            background-color: #0bcf0b;
+            color: white;
+            margin-bottom: 15px;
+            position: relative;
+        }
+
         .alert {
             padding: 20px;
             background-color: #f44336;

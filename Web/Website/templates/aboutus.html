@@ -23,13 +23,18 @@
       <nav>
         <ul>
           <li><a href="{{ url_for('views.logout') }}">Logout</a></li>
+          <li><a href="{{ url_for('views.changepass') }}">Change Password</a></li>
           <li><a href="{{ url_for('views.aboutus') }}">About Us</a></li>
-          <li><a href="{{ url_for('views.camera') }}">Camera</a></li>
-          <li><a href="{{ url_for('views.schedule') }}">Schedule</a></li>
+          {%if type == 'Admin'%}
           <li><a href="{{ url_for('views.log') }}">Log</a></li>
           <li><a href="{{ url_for('views.admin') }}">Admin</a></li>
           <li><a href="{{ url_for('views.faculty') }}">Faculty</a></li>
           <li><a href="{{ url_for('views.UpdateProfile') }}">Profile</a></li>
+          {% else %}
+
+          {% endif %}
+
+          <li><a href="{{ url_for('views.facultycheckin') }}">Faculty Check-in</a></li>
           <li><a href="{{ url_for('views.index') }}">Home</a></li>
           <li>
             <p>Face Recognition-Based Attendance System</p>

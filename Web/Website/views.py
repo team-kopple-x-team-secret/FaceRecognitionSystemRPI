@@ -4,8 +4,6 @@ import datetime
 import mysql.connector
 
 views = Blueprint(__name__, "views")
-currentuser = ""
-currentusertype = ""
 
 
 def login_required(route_function):
@@ -62,6 +60,8 @@ def index():
 @views.route("/profile")
 @login_required
 def profile():
+    email = session.get("email")
+    type = session.get("type")
     conn = mysql.connector.connect(
         host="127.0.0.1",
         port="3306",
@@ -74,12 +74,14 @@ def profile():
     cursor.execute("SELECT * FROM faculty")
     data = cursor.fetchall()
     cursor.close()
-    return render_template("profile.html", faculty=data)
+    return render_template("profile.html", faculty=data, email=email, type=type)
 
 
 @views.route("/faculty")
 @login_required
 def faculty():
+    email = session.get("email")
+    type = session.get("type")
     conn = mysql.connector.connect(
         host="127.0.0.1",
         port="3306",
@@ -92,12 +94,14 @@ def faculty():
     data = cursor.fetchall()
     cursor.close()
 
-    return render_template("faculty.html", faculty=data)
+    return render_template("faculty.html", faculty=data, email=email,type=type)
 
 
 @views.route("/log")
 @login_required
 def log():
+    email = session.get("email")
+    type = session.get("type")
     conn = mysql.connector.connect(
         host="127.0.0.1",
         port="3306",
@@ -110,14 +114,15 @@ def log():
     data = cursor.fetchall()
     cursor.close()
 
-    return render_template("log.html", log=data)
+    return render_template("log.html", log=data, email=email, type=type)
 
 
 @views.route("/aboutus")
 @login_required
 def aboutus():
-    type = request.args.get("type")
-    return render_template("aboutus.html", type=type)
+    email = session.get("email")
+    type = session.get("type")
+    return render_template("aboutus.html", type=type, email= email)
 
 
 @views.route("/addfaculty")
@@ -146,8 +151,6 @@ def forgetpass():
         )
         record = cursor.fetchone()
         if record:
-            
-
             cursor1 = conn.cursor()
             cursor1.execute(
                 "UPDATE users SET User_Pass=%s WHERE Email=%s", (newpass, email1)
@@ -193,13 +196,6 @@ def insert():
 
     return render_template("addfaculty.html")
 
-
-@views.route("/camera")
-@login_required
-def camera():
-    return render_template("camera.html")
-
-
 @views.route("/delete/<string:id_data>", methods=["GET"])
 @login_required
 def delete(id_data):
@@ -223,14 +219,23 @@ def delete(id_data):
 )
 @login_required
 def update(id_data, fname_data, lname_data):
+    email = session.get("email")
+    type = session.get("type")
     return render_template(
-        "updatefaculty.html", id=id_data, fname=fname_data, lname=lname_data
+        "updatefaculty.html",
+        id=id_data,
+        fname=fname_data,
+        lname=lname_data,
+        email=email,
+        type=type,
     )
 
 
 @views.route("/updated/", methods=["GET", "POST"])
 @login_required
 def updated():
+    email = session.get("email")
+    type = session.get("type")
     conn = mysql.connector.connect(
         host="127.0.0.1",
         port="3306",
@@ -258,12 +263,14 @@ def updated():
 
         flash("Edit Successfully!")
 
-        return redirect(url_for("views.faculty"))
+        return redirect(url_for("views.faculty", email=email, type=type))
 
 
 @views.route("/UpdateProfile")
 @login_required
 def UpdateProfile():
+    email = session.get("email")
+    type = session.get("type")
     conn = mysql.connector.connect(
         host="127.0.0.1",
         port="3306",
@@ -272,12 +279,14 @@ def UpdateProfile():
         database="databasee",
     )
 
-    return redirect(url_for("views.profile"))
+    return redirect(url_for("views.profile", type=type, email=email))
 
 
 @views.route("/admin")
 @login_required
 def admin():
+    email = session.get("email")
+    type = session.get("type")
     conn = mysql.connector.connect(
         host="127.0.0.1",
         port="3306",
@@ -290,7 +299,7 @@ def admin():
     data = cursor.fetchall()
     cursor.close()
 
-    return render_template("Admin.html", users = data)
+    return render_template("Admin.html", users=data, email=email, type=type)
 
 
 @views.route("/changepasschanged", methods=["GET", "POST"])
@@ -304,11 +313,10 @@ def changepasschanged():
         database="databasee",
     )
     if request.method == "POST":
-
         currentpass = request.form["currentpass"]
         newpass = request.form["password"]
         confirmpass = request.form["confirmpass"]
-        email = session.get('email')
+        email = session.get("email")
 
         if newpass == confirmpass:
             cursor = conn.cursor()
@@ -336,12 +344,6 @@ def changepasschanged():
     return render_template("Admin.html")
 
 
-@views.route("/schedule")
-@login_required
-def schedule():
-    return render_template("schedule.html")
-
-
 @views.route("/attendanceprofile/<string:id_data>/<string:lname_data>")
 @login_required
 def attendanceprofile(id_data, lname_data):
@@ -367,6 +369,8 @@ def attendanceprofile(id_data, lname_data):
 @views.route("/searchlog", methods=["GET", "POST"])
 @login_required
 def searchlog():
+    email = session.get("email")
+    type = session.get("type")
     conn = mysql.connector.connect(
         host="127.0.0.1",
         port="3306",
@@ -382,12 +386,14 @@ def searchlog():
         cursor = conn.cursor()
         cursor.execute(query)
         results = cursor.fetchall()
-    return render_template("searchlog.html", results=results)
+    return render_template("searchlog.html", results=results, email=email, type=type)
 
 
 @views.route("/searchfaculty", methods=["GET", "POST"])
 @login_required
 def searchfaculty():
+    email = session.get("email")
+    type = session.get("type")
     conn = mysql.connector.connect(
         host="127.0.0.1",
         port="3306",
@@ -403,12 +409,17 @@ def searchfaculty():
         cursor = conn.cursor()
         cursor.execute(query)
         results = cursor.fetchall()
-    return render_template("searchfaculty.html", results=results)
+
+    return render_template(
+        "searchfaculty.html", results=results, email=email, type=type
+    )
 
 
 @views.route("/searchprofile", methods=["GET", "POST"])
 @login_required
 def searchprofile():
+    email = session.get("email")
+    type = session.get("type")
     conn = mysql.connector.connect(
         host="127.0.0.1",
         port="3306",
@@ -424,7 +435,10 @@ def searchprofile():
         cursor = conn.cursor()
         cursor.execute(query)
         results = cursor.fetchall()
-    return render_template("searchprofile.html", results=results)
+
+    return render_template(
+        "searchprofile.html", results=results, email=email, type=type
+    )
 
 
 @views.route("/logout")
@@ -439,7 +453,7 @@ def changepass():
     type = session.get("type")
     return render_template("changepass.html", email=email, type=type)
 
+
 @views.route("/facultycheckin")
 def facultycheckin():
-    
     return render_template("facultycheckin")

@@ -1,4 +1,5 @@
 from flask import Flask, session
+from functools import wraps
 from views import views
 import mysql.connector
 
@@ -15,6 +16,7 @@ app = Flask(__name__)
 app.secret_key = "sssswhhhaz"
 
 app.register_blueprint(views, url_prefix="/")
+
 
 if __name__ == "__main__":
     app.run(debug=True)

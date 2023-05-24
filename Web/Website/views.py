@@ -1,8 +1,23 @@
+from functools import wraps
 from flask import Blueprint, render_template, redirect, request, session, url_for, flash
 import datetime
 import mysql.connector
 
 views = Blueprint(__name__, "views")
+currentuser = ""
+currentusertype = ""
+
+
+def login_required(route_function):
+    @wraps(route_function)
+    def decorated_function(*args, **kwargs):
+        if "logged_in" not in session:
+            return redirect(
+                url_for("views.login")
+            )  # Redirect to the login page if not logged in
+        return route_function(*args, **kwargs)
+
+    return decorated_function
 
 
 @views.route("/", methods=["GET", "POST"])
@@ -24,21 +39,31 @@ def login():
         )
         record = cursor.fetchone()
         if record:
-            session["loggedin"] = True
-            session["email"] = record[1]
-            session["password"] = record[2]
-            return redirect(url_for("views.index"))
+            session["logged_in"] = True
+            session["email"] = record[0]
+            session["password"] = record[3]
+            currentuser = record[0]
+            currentusertype = record[5]
+            return redirect(
+                url_for("views.index"),
+            )
         else:
             flash("Incorrect Email or Password!")
     return render_template("login.html")
 
 
 @views.route("/index")
+@login_required
 def index():
-    return render_template("index.html")
+    return render_template(
+        "index.html",
+        Currentuser=currentuser,
+        Currentusertype=currentusertype,
+    )
 
 
 @views.route("/profile")
+@login_required
 def profile():
     conn = mysql.connector.connect(
         host="127.0.0.1",
@@ -56,6 +81,7 @@ def profile():
 
 
 @views.route("/faculty")
+@login_required
 def faculty():
     conn = mysql.connector.connect(
         host="127.0.0.1",
@@ -73,6 +99,7 @@ def faculty():
 
 
 @views.route("/log")
+@login_required
 def log():
     conn = mysql.connector.connect(
         host="127.0.0.1",
@@ -90,11 +117,13 @@ def log():
 
 
 @views.route("/aboutus")
+@login_required
 def aboutus():
     return render_template("aboutus.html")
 
 
 @views.route("/addfaculty")
+@login_required
 def addfaculty():
     return render_template("addfaculty.html")
 
@@ -120,8 +149,8 @@ def forgetpass():
         record = cursor.fetchone()
         if record:
             session["loggedin"] = True
-            session["email"] = record[1]
-            session["secretkey"] = record[3]
+            session["email"] = record[0]
+            session["secretkey"] = record[4]
 
             cursor1 = conn.cursor()
             cursor1.execute(
@@ -141,6 +170,7 @@ def forgetpass():
 
 
 @views.route("/insert", methods=["GET", "POST"])
+@login_required
 def insert():
     conn = mysql.connector.connect(
         host="127.0.0.1",
@@ -169,11 +199,13 @@ def insert():
 
 
 @views.route("/camera")
+@login_required
 def camera():
     return render_template("camera.html")
 
 
 @views.route("/delete/<string:id_data>", methods=["GET"])
+@login_required
 def delete(id_data):
     flash("Record has been Deleted")
     conn = mysql.connector.connect(
@@ -193,6 +225,7 @@ def delete(id_data):
     "/update/<string:id_data>/<string:fname_data>/<string:lname_data>",
     methods=["GET", "POST"],
 )
+@login_required
 def update(id_data, fname_data, lname_data):
     return render_template(
         "updatefaculty.html", id=id_data, fname=fname_data, lname=lname_data
@@ -200,6 +233,7 @@ def update(id_data, fname_data, lname_data):
 
 
 @views.route("/updated/", methods=["GET", "POST"])
+@login_required
 def updated():
     conn = mysql.connector.connect(
         host="127.0.0.1",
@@ -232,6 +266,7 @@ def updated():
 
 
 @views.route("/UpdateProfile")
+@login_required
 def UpdateProfile():
     conn = mysql.connector.connect(
         host="127.0.0.1",
@@ -245,11 +280,13 @@ def UpdateProfile():
 
 
 @views.route("/admin")
+@login_required
 def admin():
     return render_template("Admin.html")
 
 
 @views.route("/adminchanged", methods=["GET", "POST"])
+@login_required
 def adminchanged():
     conn = mysql.connector.connect(
         host="127.0.0.1",
@@ -294,11 +331,13 @@ def adminchanged():
 
 
 @views.route("/schedule")
+@login_required
 def schedule():
     return render_template("schedule.html")
 
 
 @views.route("/attendanceprofile/<string:id_data>/<string:lname_data>")
+@login_required
 def attendanceprofile(id_data, lname_data):
     conn = mysql.connector.connect(
         host="127.0.0.1",
@@ -320,6 +359,7 @@ def attendanceprofile(id_data, lname_data):
 
 
 @views.route("/searchlog", methods=["GET", "POST"])
+@login_required
 def searchlog():
     conn = mysql.connector.connect(
         host="127.0.0.1",
@@ -338,7 +378,9 @@ def searchlog():
         results = cursor.fetchall()
     return render_template("searchlog.html", results=results)
 
+
 @views.route("/searchfaculty", methods=["GET", "POST"])
+@login_required
 def searchfaculty():
     conn = mysql.connector.connect(
         host="127.0.0.1",
@@ -357,7 +399,9 @@ def searchfaculty():
         results = cursor.fetchall()
     return render_template("searchfaculty.html", results=results)
 
+
 @views.route("/searchprofile", methods=["GET", "POST"])
+@login_required
 def searchprofile():
     conn = mysql.connector.connect(
         host="127.0.0.1",
@@ -376,3 +420,9 @@ def searchprofile():
         results = cursor.fetchall()
     return render_template("searchprofile.html", results=results)
 
+@views.route("/logout")
+def logout():
+    session.clear()
+    currentuser = ""
+    currentusertype = ""
+    return redirect(url_for("views.login"))

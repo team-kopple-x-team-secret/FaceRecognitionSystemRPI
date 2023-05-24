@@ -10,7 +10,7 @@
 </head>
 
 <link rel="stylesheet" href="{{ url_for('static',filename='loginstyle.css') }}" />
-<title>Add Faculty Account</title>
+<title>Add User Account</title>
 </head>
 
 <body>
@@ -44,11 +44,17 @@
       <div class="col-md-6 right-box">
         <div class="row align-items-center">
           <div class="header-text mb-4">
-            <h2>Add Faculty</h2>
+            <h2>Add User</h2>
           </div>
 
 
           <form action="{{ url_for('views.insert') }}" method="post">
+
+            <div class="form-floating">
+              <input type="email" class="form-control" id="email" placeholder="Email" name="email" required />
+              <label for="floatingInput">Email</label>
+            </div>
+
             <div class="form-floating">
               <input type="firstname" class="form-control" id="firstname" placeholder="username" name="fname"
                 required />
@@ -59,19 +65,8 @@
               <label for="floatingInput">Last name</label>
             </div>
             <div class="form-floating">
-              <input type="Adress" class="form-control" id="Adress" placeholder="address" name="address" required />
-              <label for="floatingInput">Address</label>
-            </div>
-
-            <div class="form-floating">
-              <input type="text" id="datepicker" class="form-control" placeholder="birthday" name="birthday" required>
-              <label for="floatingInput">birthday</label>
-            </div>
-
-            <div class="form-floating">
-              <input type="Department" class="form-control" id="Department" placeholder="Department" name="department"
-                required />
-              <label for="floatingPassword">Department</label>
+              <input type="password" id="secretkey" class="form-control" placeholder="secretkey" name="secretkey" required>
+              <label for="floatingInput">secretkey</label>
             </div>
 
             <div class="d-grid gap-2 d-md-block">
@@ -80,7 +75,7 @@
               </button>
           </form>
 
-          <a href="{{ url_for('views.faculty') }}" class="btn btn-secondary btn-mg active" role="button"
+          <a href="{{ url_for('views.admin') }}" class="btn btn-secondary btn-mg active" role="button"
             aria-pressed="true">Back</a>
         </div>
       </div>

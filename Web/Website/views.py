@@ -6,6 +6,18 @@ import mysql.connector
 views = Blueprint(__name__, "views")
 
 
+def admin_required(route_function):
+    @wraps(route_function)
+    def decorated_function(*args, **kwargs):
+        if "type" in session and session["type"] != "Admin":
+            return redirect(
+                url_for("views.login")
+            )  # Redirect to the login page if not logged in
+        return route_function(*args, **kwargs)
+
+    return decorated_function
+
+
 def login_required(route_function):
     @wraps(route_function)
     def decorated_function(*args, **kwargs):
@@ -58,6 +70,7 @@ def index():
 
 
 @views.route("/profile")
+@admin_required
 @login_required
 def profile():
     email = session.get("email")
@@ -78,6 +91,7 @@ def profile():
 
 
 @views.route("/faculty")
+@admin_required
 @login_required
 def faculty():
     email = session.get("email")
@@ -94,10 +108,11 @@ def faculty():
     data = cursor.fetchall()
     cursor.close()
 
-    return render_template("faculty.html", faculty=data, email=email,type=type)
+    return render_template("faculty.html", faculty=data, email=email, type=type)
 
 
 @views.route("/log")
+@admin_required
 @login_required
 def log():
     email = session.get("email")
@@ -122,7 +137,7 @@ def log():
 def aboutus():
     email = session.get("email")
     type = session.get("type")
-    return render_template("aboutus.html", type=type, email= email)
+    return render_template("aboutus.html", type=type, email=email)
 
 
 @views.route("/addfaculty")
@@ -170,6 +185,7 @@ def forgetpass():
 
 @views.route("/insert", methods=["GET", "POST"])
 @login_required
+@admin_required
 def insert():
     conn = mysql.connector.connect(
         host="127.0.0.1",
@@ -196,8 +212,10 @@ def insert():
 
     return render_template("addfaculty.html")
 
+
 @views.route("/delete/<string:id_data>", methods=["GET"])
 @login_required
+@admin_required
 def delete(id_data):
     flash("Record has been Deleted")
     conn = mysql.connector.connect(
@@ -217,6 +235,7 @@ def delete(id_data):
     "/update/<string:id_data>/<string:fname_data>/<string:lname_data>",
     methods=["GET", "POST"],
 )
+@admin_required
 @login_required
 def update(id_data, fname_data, lname_data):
     email = session.get("email")
@@ -232,6 +251,7 @@ def update(id_data, fname_data, lname_data):
 
 
 @views.route("/updated/", methods=["GET", "POST"])
+@admin_required
 @login_required
 def updated():
     email = session.get("email")
@@ -267,6 +287,7 @@ def updated():
 
 
 @views.route("/UpdateProfile")
+@admin_required
 @login_required
 def UpdateProfile():
     email = session.get("email")
@@ -283,6 +304,7 @@ def UpdateProfile():
 
 
 @views.route("/admin")
+@admin_required
 @login_required
 def admin():
     email = session.get("email")
@@ -345,6 +367,7 @@ def changepasschanged():
 
 
 @views.route("/attendanceprofile/<string:id_data>/<string:lname_data>")
+@admin_required
 @login_required
 def attendanceprofile(id_data, lname_data):
     conn = mysql.connector.connect(
@@ -367,6 +390,7 @@ def attendanceprofile(id_data, lname_data):
 
 
 @views.route("/searchlog", methods=["GET", "POST"])
+@admin_required
 @login_required
 def searchlog():
     email = session.get("email")
@@ -390,6 +414,7 @@ def searchlog():
 
 
 @views.route("/searchfaculty", methods=["GET", "POST"])
+@admin_required
 @login_required
 def searchfaculty():
     email = session.get("email")
@@ -416,6 +441,7 @@ def searchfaculty():
 
 
 @views.route("/searchprofile", methods=["GET", "POST"])
+@admin_required
 @login_required
 def searchprofile():
     email = session.get("email")

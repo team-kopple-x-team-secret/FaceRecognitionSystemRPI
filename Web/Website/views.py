@@ -41,9 +41,8 @@ def login():
         if record:
             session["logged_in"] = True
             session["email"] = record[0]
-            session["password"] = record[3]
-            currentuser = record[0]
-            currentusertype = record[5]
+            session["type"] = record[5]
+
             return redirect(
                 url_for("views.index"),
             )
@@ -52,14 +51,12 @@ def login():
     return render_template("login.html")
 
 
-@views.route("/index")
+@views.route("/index/")
 @login_required
 def index():
-    return render_template(
-        "index.html",
-        Currentuser=currentuser,
-        Currentusertype=currentusertype,
-    )
+    email = session.get("email")
+    type = session.get("type")
+    return render_template("index.html", email=email, type=type)
 
 
 @views.route("/profile")
@@ -119,7 +116,8 @@ def log():
 @views.route("/aboutus")
 @login_required
 def aboutus():
-    return render_template("aboutus.html")
+    type = request.args.get("type")
+    return render_template("aboutus.html", type=type)
 
 
 @views.route("/addfaculty")
@@ -148,9 +146,7 @@ def forgetpass():
         )
         record = cursor.fetchone()
         if record:
-            session["loggedin"] = True
-            session["email"] = record[0]
-            session["secretkey"] = record[4]
+            
 
             cursor1 = conn.cursor()
             cursor1.execute(
@@ -282,12 +278,24 @@ def UpdateProfile():
 @views.route("/admin")
 @login_required
 def admin():
-    return render_template("Admin.html")
+    conn = mysql.connector.connect(
+        host="127.0.0.1",
+        port="3306",
+        password="1234",
+        user="root",
+        database="databasee",
+    )
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM users ORDER BY Type ASC ")
+    data = cursor.fetchall()
+    cursor.close()
+
+    return render_template("Admin.html", users = data)
 
 
-@views.route("/adminchanged", methods=["GET", "POST"])
+@views.route("/changepasschanged", methods=["GET", "POST"])
 @login_required
-def adminchanged():
+def changepasschanged():
     conn = mysql.connector.connect(
         host="127.0.0.1",
         port="3306",
@@ -296,25 +304,23 @@ def adminchanged():
         database="databasee",
     )
     if request.method == "POST":
+
         currentpass = request.form["currentpass"]
         newpass = request.form["password"]
         confirmpass = request.form["confirmpass"]
+        email = session.get('email')
 
         if newpass == confirmpass:
             cursor = conn.cursor()
             cursor.execute(
-                "SELECT * FROM databasee.users WHERE ID=%s AND User_Pass= %s",
-                ("1", currentpass),
+                "SELECT * FROM databasee.users WHERE Email=%s AND User_Pass= %s",
+                (email, currentpass),
             )
             record = cursor.fetchone()
             if record:
-                session["loggedin"] = True
-                session["ID"] = record[0]
-                session["User_Pass"] = record[2]
-
                 cursor1 = conn.cursor()
                 cursor1.execute(
-                    "UPDATE users SET User_Pass=%s WHERE ID=%s", (newpass, "1")
+                    "UPDATE users SET User_Pass=%s WHERE Email=%s", (newpass, email)
                 )
                 conn.commit()
                 cursor.close()
@@ -420,9 +426,20 @@ def searchprofile():
         results = cursor.fetchall()
     return render_template("searchprofile.html", results=results)
 
+
 @views.route("/logout")
 def logout():
     session.clear()
-    currentuser = ""
-    currentusertype = ""
     return redirect(url_for("views.login"))
+
+
+@views.route("/changepass")
+def changepass():
+    email = session.get("email")
+    type = session.get("type")
+    return render_template("changepass.html", email=email, type=type)
+
+@views.route("/facultycheckin")
+def facultycheckin():
+    
+    return render_template("facultycheckin")

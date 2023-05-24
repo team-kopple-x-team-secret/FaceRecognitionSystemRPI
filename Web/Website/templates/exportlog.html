@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Table Export</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: 8px;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Log Data</h1>
+    <table>
+        <thead>
+            <tr>
+                <style>
+                    thead {
+                        color: #a8a394;
+                    }
+                </style>
+
+                <th>Id <span class="icon-arrow">&UpArrow;</span></th>
+                <th>Employee <span class="icon-arrow">&UpArrow;</span></th>
+                <th>Time In <span class="icon-arrow">&UpArrow;</span></th>
+                <th>Time Out <span class="icon-arrow">&UpArrow;</span></th>
+                <th>Department <span class="icon-arrow">&UpArrow;</span></th>
+                <th>Date <span class="icon-arrow">&UpArrow;</span></th>
+                
+            </tr>
+        </thead>
+        <tbody>
+            {%for row in log%}
+
+            <tr>
+
+                <td>{{row.0}}</td>
+                <td><img src="{{ url_for('static', filename='person.png') }}" alt="" /> {{row.1 + " " + row.2}}</td>
+                <td>{{row.3}}</td>
+                <td>{{row.4}}</td>
+                <td><strong> {{row.5}} </strong></td>
+                <td>{{row.6}}</td>
+            </tr>
+            {% endfor %}
+
+        </tbody>
+    </table>
+</body>
+
+</html>

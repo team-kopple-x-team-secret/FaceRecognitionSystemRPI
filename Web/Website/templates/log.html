@@ -58,21 +58,10 @@
     <main class="table">
       <section class="table__header">
         <h1>Log</h1>
-        <div class="export__file">
-          <label for="export-file" class="export__file-btn" title="Export File"></label>
-          <input type="checkbox" id="export-file" />
-          <div class="export__file-options">
-            <label>Export As &nbsp; &#10140;</label>
-            <label for="export-file" id="toPDF">PDF <img src="{{ url_for('static', filename='pdf.png') }}"
-                alt="" /></label>
-            <label for="export-file" id="toJSON">JSON <img src="{{ url_for('static', filename='json.png') }}"
-                alt="" /></label>
-            <label for="export-file" id="toCSV">CSV <img src="{{ url_for('static', filename='csv.png') }}"
-                alt="" /></label>
-            <label for="export-file" id="toEXCEL">EXCEL <img src="{{ url_for('static', filename='excel.png') }}"
-                alt="" /></label>
-          </div>
-        </div>
+
+        <form action="{{ url_for('views.exportlog_pdf') }}" method="POST">
+          <button class="redmy-button" value="submit" type="submit">Download Table PDF</button>
+        </form>
 
         <form form action="{{ url_for('views.searchlog')}}" method="post">
           <input class="input" type="input" placeholder="Search Data..." name="searched" />

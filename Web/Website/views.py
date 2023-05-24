@@ -1,7 +1,19 @@
 from functools import wraps
-from flask import Blueprint, render_template, redirect, request, session, url_for, flash
+from flask import (
+    Blueprint,
+    render_template,
+    redirect,
+    request,
+    session,
+    url_for,
+    flash,
+    send_file,
+    make_response,
+)
 from datetime import datetime
 import mysql.connector
+import pdfkit
+import pdfcrowd
 
 views = Blueprint(__name__, "views")
 
@@ -556,3 +568,77 @@ def insertcheckin():
             flash("Information Doesnt Exist")
 
     return render_template("facultycheckin.html")
+
+
+@views.route("/export-pdf", methods=["POST"])
+def export_pdf():
+    email = session.get("email")
+    type = session.get("type")
+    conn = mysql.connector.connect(
+        host="127.0.0.1",
+        port="3306",
+        password="1234",
+        user="root",
+        database="databasee",
+    )
+
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM faculty")
+    data = cursor.fetchall()
+    cursor.close()
+
+    html_table = render_template("export.html", faculty=data)
+
+    # Set your PDFCrowd credentials (username and API key)
+    username = "Req"
+    api_key = "162b2c7974994fdae8aa9ad1e8c0b80d"
+
+    # Create a PDFCrowd client instance
+    client = pdfcrowd.HtmlToPdfClient(username, api_key)
+
+    # Convert HTML to PDF
+    pdf_output = client.convertString(html_table)
+
+    # Create a response with the PDF content
+    response = make_response(pdf_output)
+    response.headers["Content-Type"] = "application/pdf"
+    response.headers["Content-Disposition"] = "attachment; filename=faculty.pdf"
+
+    return response
+
+
+@views.route("/exportlog-pdf", methods=["POST"])
+def exportlog_pdf():
+    email = session.get("email")
+    type = session.get("type")
+    conn = mysql.connector.connect(
+        host="127.0.0.1",
+        port="3306",
+        password="1234",
+        user="root",
+        database="databasee",
+    )
+
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM log ORDER BY Datee DESC")
+    data = cursor.fetchall()
+    cursor.close()
+
+    html_table = render_template("exportlog.html", log=data)
+
+    # Set your PDFCrowd credentials (username and API key)
+    username = "Req"
+    api_key = "162b2c7974994fdae8aa9ad1e8c0b80d"
+
+    # Create a PDFCrowd client instance
+    client = pdfcrowd.HtmlToPdfClient(username, api_key)
+
+    # Convert HTML to PDF
+    pdf_output = client.convertString(html_table)
+
+    # Create a response with the PDF content
+    response = make_response(pdf_output)
+    response.headers["Content-Type"] = "application/pdf"
+    response.headers["Content-Disposition"] = "attachment; filename=log.pdf"
+
+    return response

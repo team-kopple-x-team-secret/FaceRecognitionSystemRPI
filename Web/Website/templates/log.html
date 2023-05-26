@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en" title="Coding design">
+
+<head>
+
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <title>Log-RTU Pasig Faculty Face Recognition Based System</title>
+  <link rel="stylesheet" href="{{ url_for('static',filename='profilestyle.css') }}" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@200;400&display=swap" rel="stylesheet" />
+</head>
+
+<body>
+  <!--
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <a href="index.html">
+    <button class="button"><i class="fa fa-home"></i> Home</button>
+    </a>
+    -->
+  <div class="container">
+    <div class="navbar">
+      <div class="logo">
+        <img src="{{ url_for('static', filename='rtulogo.png') }}" />
+      </div>
+      <nav>
+        <ul>
+          <li><a href="{{ url_for('views.logout') }}">Logout</a></li>
+          <li><a href="{{ url_for('views.changepass') }}">Change Password</a></li>
+          <li><a href="{{ url_for('views.aboutus') }}">About Us</a></li>
+          {%if type == 'Admin'%}
+          <li><a href="{{ url_for('views.log') }}">Log</a></li>
+          <li><a href="{{ url_for('views.admin') }}">Admin</a></li>
+          <li><a href="{{ url_for('views.faculty') }}">Faculty</a></li>
+          <li><a href="{{ url_for('views.UpdateProfile') }}">Profile</a></li>
+          {% else %}
+
+          {% endif %}
+
+          <li><a href="{{ url_for('views.facultycheckin') }}">Faculty Check-in</a></li>
+          <li><a href="{{ url_for('views.index') }}">Home</a></li>
+          <li>
+            <p>Face Recognition-Based Attendance System</p>
+          </li>
+        </ul>
+      </nav>
+    </div>
+    <div class="sidebar">
+      <div class="social-links">
+        <img src="{{ url_for('static', filename='facebook.png') }}" />
+        <img src="{{ url_for('static', filename='gmail.png') }}" />
+        <img src="{{ url_for('static', filename='phone.png') }}" />
+      </div>
+    </div>
+
+    <main class="table">
+      <section class="table__header">
+        <h1>Log</h1>
+
+        <form action="{{ url_for('views.exportlog_pdf') }}" method="POST">
+          <button class="redmy-button" value="submit" type="submit">Download Table PDF</button>
+        </form>
+
+        <form form action="{{ url_for('views.searchlog')}}" method="post">
+          <input class="input" type="input" placeholder="Search Data..." name="searched" />
+          <button class="btn btn-success" id="submit" type="submit" value="submit">
+            Search
+          </button>
+        </form>
+
+        <div class="button-container">
+          <a href="{{ url_for('views.log') }}" class="my-button">Refresh</a>
+        </div>
+
+      </section>
+      <section class="table__body">
+        <table>
+          <thead>
+            <tr>
+              <style>
+                thead {
+                  color: #a8a394;
+                }
+              </style>
+              <th>Id <span class="icon-arrow">&UpArrow;</span></th>
+              <th>Employee <span class="icon-arrow">&UpArrow;</span></th>
+              <th>Time-in <span class="icon-arrow">&UpArrow;</span></th>
+              <th>Time-out <span class="icon-arrow">&UpArrow;</span></th>
+              <th>Department <span class="icon-arrow">&UpArrow;</span></th>
+              <th>Date <span class="icon-arrow">&UpArrow;</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            {%for row in log %}
+            <tr>
+              <td>{{row.0}}</td>
+              <td><img src="{{ url_for('static', filename='person.png') }}" alt="" />{{row.1 +" "+row.2}}</td>
+              <td>
+                <p class="status present">{{row.3}}</p>
+              </td>
+              <td>
+                <p class="status absent">{{row.4}}</p>
+              </td>
+              <td><strong> {{row.5}} </strong></td>
+              <td>{{row.6}}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </section>
+    </main>
+    <style>
+      .my-button {
+        display: inline-block;
+        background-color: #00f514;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        font-size: 16px;
+        border-radius: 5px;
+        cursor: pointer;
+        text-decoration: none;
+        box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+      }
+
+      .my-button:hover {
+        background-color: #0062cc;
+        box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+      }
+
+      .my-button:active {
+        background-color: #005cbf;
+        box-shadow: none;
+      }
+
+      .button-container {
+        text-align: right;
+      }
+
+      .button-container button {
+        float: right;
+        margin-left: 10px;
+      }
+
+      input[type="text"] {
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        margin-right: 10px;
+      }
+
+      button[type="submit"] {
+        padding: 10px 20px;
+        background-color: #4CAF50;
+        border: none;
+        color: white;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+    </style>
+</body>
+
+</html>

@@ -1,0 +1,93 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&display=swap");
+
+body {
+  font-family: "Poppins", sans-serif;
+  
+  background: url("rtu.jpg") center / cover;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  backdrop-filter: blur(4px);
+}
+
+/*--Login container --*/
+
+.box-area {
+  width: 930px;
+}
+
+/*-- Right box --*/
+
+.right-box {
+  padding: 20px 10px 20px 20px;
+}
+
+/*-- Custom Placeholder --*/
+
+::placeholder {
+  font-size: 16px;
+}
+
+.rounded-4 {
+  border-radius: 20px;
+}
+.rounded-5 {
+  border-radius: 30px;
+}
+
+/*-- For small screens --*/
+
+@media only screen and (max-width: 768px) {
+  .box-area {
+    margin: 0 10px;
+  }
+  .left-box {
+    height: 100px;
+    overflow: hidden;
+  }
+  .right-box {
+    padding: 20px;
+  }
+}
+/*-- For Forms --*/
+.form-floating {
+  margin-top: 10px;
+}
+
+.form-control {
+  border-radius: 20px;
+  border: 1.5px solid;
+  border-style: groove;
+  border-color: rgb(242, 75, 19);
+  font-size: 18px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+.form-control:hover {
+  border-radius: 20px;
+  border: 3px solid;
+  border-style: groove;
+  border-color: rgb(242, 75, 19);
+  font-size: 18px;
+}
+/*-- For Button --*/
+.btn {
+  margin-top: 20px;
+  margin-left: 20px;
+  width: 100px;
+  float: right;
+}
+.btn:hover {
+  background-color: rgb(242, 75, 19);
+  border-color: rgb(242, 75, 19);
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+.login {
+  width: 80%;
+  height: 120px;
+  position: relative;
+  object-fit: contain;
+}
+

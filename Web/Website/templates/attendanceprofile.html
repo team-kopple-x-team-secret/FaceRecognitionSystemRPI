@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en" title="Coding design">
+
+<head>
+
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Profile-RTU Pasig Faculty Face Recognition Based System</title>
+    <link rel="stylesheet" href="{{ url_for('static',filename='profilestyle.css') }}" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@200;400&display=swap" rel="stylesheet" />
+</head>
+
+<body>
+    <!--
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <a href="index.html">
+    <button class="button"><i class="fa fa-home"></i> Home</button>
+    </a>
+    -->
+
+    <div class="container">
+        <div class="navbar">
+            <div class="logo">
+                <img src="{{ url_for('static', filename='rtulogo.png') }}" />
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="{{ url_for('views.logout') }}">Logout</a></li>
+                    <li><a href="{{ url_for('views.changepass') }}">Change Password</a></li>
+                    <li><a href="{{ url_for('views.aboutus') }}">About Us</a></li>
+                    {%if type == 'Admin'%}
+                    <li><a href="{{ url_for('views.log') }}">Log</a></li>
+                    <li><a href="{{ url_for('views.admin') }}">Admin</a></li>
+                    <li><a href="{{ url_for('views.faculty') }}">Faculty</a></li>
+                    <li><a href="{{ url_for('views.UpdateProfile') }}">Profile</a></li>
+                    {% else %}
+
+                    {% endif %}
+
+                    <li><a href="{{ url_for('views.facultycheckin') }}">Faculty Check-in</a></li>
+                    <li><a href="{{ url_for('views.index') }}">Home</a></li>
+                    <li>
+                        <p>Face Recognition-Based Attendance System</p>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        {% for message in messages %}
+        <div class="alert">
+            <span class="closebtn">&times;</span>
+            {{message}}
+        </div>
+
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+        <div class="sidebar">
+            <div class="social-links">
+                <img src="{{ url_for('static', filename='facebook.png') }}" />
+                <img src="{{ url_for('static', filename='gmail.png') }}" />
+                <img src="{{ url_for('static', filename='phone.png') }}" />
+            </div>
+        </div>
+
+        <main class="table">
+            <section class="table__header">
+
+                <h1>Selected Faculty: {{lname}}</h1>
+
+                <a href="{{ url_for('views.profile') }}" class="my-button">Back</a>
+
+            </section>
+            <section class="table__body">
+                <table>
+                    <thead>
+                        <tr>
+                            <style>
+                                thead {
+                                    color: #a8a394;
+                                }
+                            </style>
+
+                            <th>Employee <span class="icon-arrow">&UpArrow;</span></th>
+                            <th>Time-in <span class="icon-arrow">&UpArrow;</span></th>
+                            <th>Time-out <span class="icon-arrow">&UpArrow;</span></th>
+                            <th>Department <span class="icon-arrow">&UpArrow;</span></th>
+                            <th>Date <span class="icon-arrow">&UpArrow;</span></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {%for row in profilerecord %}
+
+                        <tr>
+
+                            <td><img src="{{ url_for('static', filename='person.png') }}" alt="" />{{row.1 +" "+row.2}}
+                            </td>
+                            <td>
+                                <p class="status present">{{row.3}}</p>
+                            </td>
+                            <td>
+                                <p class="status absent">{{row.4}}</p>
+                            </td>
+                            <td><strong> {{row.5}} </strong></td>
+                            <td>{{row.6}}</td>
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+                </table>
+
+            </section>
+
+        </main>
+
+</body>
+<script>
+
+</script>
+<style>
+    .my-button {
+        display: inline-block;
+        background-color: #000000;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        font-size: 16px;
+        border-radius: 5px;
+        cursor: pointer;
+        text-decoration: none;
+        box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+    }
+
+    .my-button:hover {
+        background-color: #0062cc;
+        box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+    }
+
+    .my-button:active {
+        background-color: #005cbf;
+        box-shadow: none;
+    }
+
+    .mybtn-edit {
+        display: inline-block;
+        background-color: #ff7300;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        font-size: 16px;
+        border-radius: 5px;
+        cursor: pointer;
+        text-decoration: none;
+        box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+    }
+
+    .mybtn-edit:hover {
+        background-color: #0062cc;
+        box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+    }
+
+    .mybtn-edit:active {
+        background-color: #005cbf;
+        box-shadow: none;
+    }
+
+    .mybtn-delete {
+        display: inline-block;
+        background-color: #ff0000;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        font-size: 16px;
+        border-radius: 5px;
+        cursor: pointer;
+        text-decoration: none;
+        box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+    }
+
+    .mybtn-delete:hover {
+        background-color: #0062cc;
+        box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+    }
+
+    .mybtn-delete:active {
+        background-color: #005cbf;
+        box-shadow: none;
+    }
+
+    .alert {
+        padding: 20px;
+        background-color: #48ff00;
+        color: white;
+        margin-bottom: 15px;
+        position: relative;
+    }
+
+    .closebtn {
+        margin-left: 15px;
+        color: white;
+        font-weight: bold;
+        float: right;
+        font-size: 22px;
+        line-height: 20px;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    .closebtn:hover {
+        color: black;
+    }
+</style>
+<script>
+    var alert = document.querySelector('.alert');
+
+    // Get the close button
+    var closeBtn = alert.querySelector('.closebtn');
+
+    // Add a click event listener to the close button
+    closeBtn.addEventListener('click', function () {
+        // Hide the alert message
+        alert.style.display = 'none';
+    });
+</script>
+
+
+</html>

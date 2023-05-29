@@ -294,8 +294,8 @@ def updated():
         cursor = conn.cursor()
 
         cursor.execute(
-            "UPDATE faculty SET First_name=%s, Last_name=%s, Address=%s, Birthday=%s, Status=%s, Department=%s WHERE ID=%s",
-            (firstname, lastname, address, birthday, status, Department, id1),
+            "UPDATE faculty SET First_name=%s, Last_name=%s, Address=%s, Birthday=%s, Department=%s WHERE ID=%s",
+            (firstname, lastname, address, birthday, Department, id1),
         )
         conn.commit()
         cursor.close()

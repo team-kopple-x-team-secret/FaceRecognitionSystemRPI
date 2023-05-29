@@ -56,8 +56,7 @@
             <center><img src="{{ url_for('static', filename='logoblack.png') }}" class="login" /></center>
 
             <div class="form-floating">
-              <input type="email" class="form-control" id="Email" name="email" placeholder="name@example.com"
-                required />
+              <input type="email" class="form-control" id="Email" name="email" placeholder="name@example.com" data-disable-textfield="{{ disable_textfield|lower }}" required />
               <label for="floatingInput">Email address</label>
             </div>
             <div class="form-floating">
@@ -151,9 +150,20 @@
     });
 
 
+    $(document).ready(function () {
+            var disableTextfield = $('input[name="email"]').data('disable-textfield');
+            if (disableTextfield) {
+                $('input[name="email"]').prop('disabled', true);
+                setTimeout(function () {
+                    $('input[name="email"]').prop('disabled', false);
+                }, 5000);
+            }
+        });
+
 
 
   </script>
+
   <style>
     .alert {
       padding: 20px;

@@ -70,7 +70,14 @@ def login():
             )
         else:
             flash("Incorrect Email or Password!")
-    return render_template("login.html")
+            failed_attempts = session.get("failed_attempts", 0) + 1
+            session["failed_attempts"] = failed_attempts
+            if failed_attempts >= 3:
+                return render_template("login.html", disable_textfield=True)
+            else:
+                return render_template("login.html", disable_textfield=False)
+
+    return render_template("login.html", disable_textfield=False)
 
 
 @views.route("/index/")
@@ -766,7 +773,8 @@ def edituser1():
         if record:
             cursor1 = conn.cursor()
             cursor1.execute(
-                "UPDATE users SET First_name=%s, Last_name=%s, Secret_Key=%s  WHERE Email=%s", (fname, lname,secretkey,email)
+                "UPDATE users SET First_name=%s, Last_name=%s, Secret_Key=%s  WHERE Email=%s",
+                (fname, lname, secretkey, email),
             )
             conn.commit()
             cursor.close()

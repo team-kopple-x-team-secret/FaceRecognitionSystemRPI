@@ -37,7 +37,7 @@
                     <li><a href="{{ url_for('views.faculty') }}">Faculty</a></li>
                     <li><a href="{{ url_for('views.UpdateProfile') }}">Profile</a></li>
                     {% else %}
-
+                    <li><a href="{{ url_for('views.edituser') }}">Edit MyProfile</a></li>
                     {% endif %}
 
                     <li><a href="{{ url_for('views.facultycheckin') }}">Faculty Check-in</a></li>
@@ -72,14 +72,14 @@
 
                 <h1>User Accounts</h1>
 
-                <form form action="{{ url_for('views.searchfaculty')}}" method="post">
+                <form form action="{{ url_for('views.searchadmin')}}" method="post">
                     <input class="input" type="input" placeholder="Search Data..." name="searched" />
                     <button class="btn btn-success" id="submit" type="submit" value="submit">
                         Search
                     </button>
                 </form>
 
-                <a href="{{ url_for('views.faculty') }}" class="my-button">Refresh</a>
+                <a href="{{ url_for('views.admin') }}" class="my-button">Refresh</a>
                 <a href="{{ url_for('views.adduser') }}" class="my-button">Add User</a>
             </section>
             <section class="table__body">
@@ -111,10 +111,7 @@
                             <td><strong> {{row.5}} </strong></td>
                             <td>
                                 {%if row.5 != 'Admin' %}
-                                <a href="/update/{{ row.0 }}/{{ row.1 }}/{{ row.2 }}" class="mybtn-edit"
-                                    data-toggle="modal" data-target="#modaledit">Edit</a>
-
-                                <a href="/delete/{{ row.0 }}" class="mybtn-delete"
+                                <a href="/deleteuser/{{ row.0 }}" class="mybtn-delete"
                                     onclick="return confirm('Are You Sure to Delete?')">Delete</a>
 
                                 {%endif%}

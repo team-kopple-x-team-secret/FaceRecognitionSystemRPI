@@ -390,6 +390,9 @@ def changepasschanged():
 @admin_required
 @login_required
 def attendanceprofile(id_data, lname_data):
+    email = session.get("email")
+    type = session.get("type")
+    session["SelectedID"] = id_data
     conn = mysql.connector.connect(
         host="127.0.0.1",
         port="3306",
@@ -406,6 +409,8 @@ def attendanceprofile(id_data, lname_data):
         id=id_data,
         lname=lname_data,
         profilerecord=data,
+        email=email,
+        type=type,
     )
 
 
@@ -642,3 +647,135 @@ def exportlog_pdf():
     response.headers["Content-Disposition"] = "attachment; filename=log.pdf"
 
     return response
+
+
+@views.route("/deleteuser/<string:email_data>", methods=["GET"])
+@login_required
+@admin_required
+def deleteuser(email_data):
+    flash("Record has been Deleted")
+    conn = mysql.connector.connect(
+        host="127.0.0.1",
+        port="3306",
+        password="1234",
+        user="root",
+        database="databasee",
+    )
+    cursor = conn.cursor()
+    query = "DELETE FROM users WHERE Email = %s"
+    cursor.execute(query, (email_data,))
+    conn.commit()
+    return redirect(url_for("views.admin"))
+
+
+@views.route("/searchadmin", methods=["GET", "POST"])
+@admin_required
+@login_required
+def searchadmin():
+    email = session.get("email")
+    type = session.get("type")
+    conn = mysql.connector.connect(
+        host="127.0.0.1",
+        port="3306",
+        password="1234",
+        user="root",
+        database="databasee",
+    )
+    if request.method == "POST":
+        search_text = request.form["searched"]
+        query = "SELECT * FROM users WHERE First_name LIKE '%{}%' OR Last_name LIKE '%{}%' OR Email LIKE '%{}%'".format(
+            search_text, search_text, search_text
+        )
+        cursor = conn.cursor()
+        cursor.execute(query)
+        results = cursor.fetchall()
+
+    return render_template("searchadmin.html", results=results, email=email, type=type)
+
+
+@views.route(
+    "/exportprofile-pdf",
+    methods=["POST"],
+)
+def exportprofile_pdf():
+    id = session.get("SelectedID")
+    type = session.get("type")
+    conn = mysql.connector.connect(
+        host="127.0.0.1",
+        port="3306",
+        password="1234",
+        user="root",
+        database="databasee",
+    )
+
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM log WHERE ID=%s ORDER BY Datee DESC", (id,))
+    data = cursor.fetchall()
+    cursor.close()
+
+    html_table = render_template("exportprofile.html", log=data)
+
+    # Set your PDFCrowd credentials (username and API key)
+    username = "Req"
+    api_key = "162b2c7974994fdae8aa9ad1e8c0b80d"
+
+    # Create a PDFCrowd client instance
+    client = pdfcrowd.HtmlToPdfClient(username, api_key)
+
+    # Convert HTML to PDF
+    pdf_output = client.convertString(html_table)
+
+    # Create a response with the PDF content
+    response = make_response(pdf_output)
+    response.headers["Content-Type"] = "application/pdf"
+    response.headers["Content-Disposition"] = "attachment; filename=profile.pdf"
+
+    return response
+
+
+@views.route("/edituser")
+@login_required
+def edituser():
+    email = session.get("email")
+    type = session.get("type")
+    return render_template("edituser.html", email=email)
+
+
+@views.route("/edituser1", methods=["GET", "POST"])
+def edituser1():
+    conn = mysql.connector.connect(
+        host="127.0.0.1",
+        port="3306",
+        password="1234",
+        user="root",
+        database="databasee",
+    )
+    if request.method == "POST":
+        email = session.get("email")
+        secretkey = request.form["secretkey"]
+        fname = request.form["fname"]
+        lname = request.form["lname"]
+        password = request.form["confirmpass"]
+
+        cursor = conn.cursor()
+        cursor.execute(
+            "SELECT * FROM databasee.users WHERE Email= %s AND Secret_Key= %s",
+            (email, password),
+        )
+        record = cursor.fetchone()
+        if record:
+            cursor1 = conn.cursor()
+            cursor1.execute(
+                "UPDATE users SET First_name=%s, Last_name=%s, Secret_Key=%s  WHERE Email=%s", (fname, lname,secretkey,email)
+            )
+            conn.commit()
+            cursor.close()
+            conn.close()
+
+            flash("Edit Successfully!")
+
+            return redirect(url_for("views.edituser"))
+
+        else:
+            flash("Incorrect Password!")
+    return render_template("edituser.html", email=email)

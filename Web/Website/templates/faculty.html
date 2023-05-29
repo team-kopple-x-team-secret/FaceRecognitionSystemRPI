@@ -37,7 +37,7 @@
           <li><a href="{{ url_for('views.faculty') }}">Faculty</a></li>
           <li><a href="{{ url_for('views.UpdateProfile') }}">Profile</a></li>
           {% else %}
-
+          <li><a href="{{ url_for('views.edituser') }}">Edit MyProfile</a></li>
           {% endif %}
 
           <li><a href="{{ url_for('views.facultycheckin') }}">Faculty Check-in</a></li>

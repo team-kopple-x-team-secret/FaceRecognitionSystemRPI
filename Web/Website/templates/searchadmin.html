@@ -70,14 +70,17 @@
         <main class="table">
             <section class="table__header">
 
-                <h1>Selected Faculty: {{lname}}</h1>
+                <h1>User Accounts</h1>
 
-                <form action="{{ url_for('views.exportprofile_pdf') }}" method="POST">
-                    <button class="redmy-button" type="submit">Download Table PDF</button>
+                <form form action="{{ url_for('views.searchadmin')}}" method="post">
+                    <input class="input" type="input" placeholder="Search Data..." name="searched" />
+                    <button class="btn btn-success" id="submit" type="submit" value="submit">
+                        Search
+                    </button>
                 </form>
 
-                <a href="{{ url_for('views.profile') }}" class="my-button">Back</a>
-
+                <a href="{{ url_for('views.admin') }}" class="my-button">Refresh</a>
+                <a href="{{ url_for('views.adduser') }}" class="my-button">Add User</a>
             </section>
             <section class="table__body">
                 <table>
@@ -89,30 +92,31 @@
                                 }
                             </style>
 
-                            <th>Employee <span class="icon-arrow">&UpArrow;</span></th>
-                            <th>Time-in <span class="icon-arrow">&UpArrow;</span></th>
-                            <th>Time-out <span class="icon-arrow">&UpArrow;</span></th>
-                            <th>Department <span class="icon-arrow">&UpArrow;</span></th>
-                            <th>Date <span class="icon-arrow">&UpArrow;</span></th>
+                            <th>Email <span class="icon-arrow">&UpArrow;</span></th>
+                            <th>Name <span class="icon-arrow">&UpArrow;</span></th>
+                            <th>Account Type <span class="icon-arrow">&UpArrow;</span></th>
+                            <th>Action <span class="icon-arrow">&UpArrow;</span></th>
                         </tr>
                     </thead>
                     <tbody>
-                        {%for row in profilerecord %}
+
+
+                        {%for row in results %}
 
                         <tr>
 
-                            <td><img src="{{ url_for('static', filename='person.png') }}" alt="" />{{row.1 +" "+row.2}}
-                            </td>
-                            <td>
-                                <p class="status present">{{row.3}}</p>
-                            </td>
-                            <td>
-                                <p class="status absent">{{row.4}}</p>
-                            </td>
+                            <td>{{row.0}}</td>
+                            <td><img src="{{ url_for('static', filename='person.png') }}" alt="" /> {{row.1 + " " +
+                                row.2}}</td>
                             <td><strong> {{row.5}} </strong></td>
-                            <td>{{row.6}}</td>
-                        </tr>
+                            <td>
+                                {%if row.5 != 'Admin' %}
+                                <a href="/deleteuser/{{ row.0 }}" class="mybtn-delete"
+                                    onclick="return confirm('Are You Sure to Delete?')">Delete</a>
 
+                                {%endif%}
+                            </td>
+                        </tr>
                         {% endfor %}
 
                     </tbody>
@@ -127,29 +131,6 @@
 
 </script>
 <style>
-    .mybtn-record {
-        display: inline-block;
-        background-color: #093ff0;
-        color: white;
-        border: none;
-        padding: 10px 20px;
-        font-size: 16px;
-        border-radius: 5px;
-        cursor: pointer;
-        text-decoration: none;
-        box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
-    }
-
-    .mybtn-record:hover {
-        background-color: #0062cc;
-        box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
-    }
-
-    .mybtn-record:active {
-        background-color: #005cbf;
-        box-shadow: none;
-    }
-
     .my-button {
         display: inline-block;
         background-color: #00f514;
@@ -171,7 +152,75 @@
     .my-button:active {
         background-color: #005cbf;
         box-shadow: none;
+    }
 
+    .mybtn-edit {
+        display: inline-block;
+        background-color: #ff7300;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        font-size: 16px;
+        border-radius: 5px;
+        cursor: pointer;
+        text-decoration: none;
+        box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+    }
+
+    .mybtn-edit:hover {
+        background-color: #0062cc;
+        box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+    }
+
+    .mybtn-edit:active {
+        background-color: #005cbf;
+        box-shadow: none;
+    }
+
+    .mybtn-delete {
+        display: inline-block;
+        background-color: #ff0000;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        font-size: 16px;
+        border-radius: 5px;
+        cursor: pointer;
+        text-decoration: none;
+        box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+    }
+
+    .mybtn-delete:hover {
+        background-color: #0062cc;
+        box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+    }
+
+    .mybtn-delete:active {
+        background-color: #005cbf;
+        box-shadow: none;
+    }
+
+    .alert {
+        padding: 20px;
+        background-color: #48ff00;
+        color: white;
+        margin-bottom: 15px;
+        position: relative;
+    }
+
+    .closebtn {
+        margin-left: 15px;
+        color: white;
+        font-weight: bold;
+        float: right;
+        font-size: 22px;
+        line-height: 20px;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    .closebtn:hover {
+        color: black;
     }
 
     input[type="text"] {
@@ -188,30 +237,6 @@
         color: white;
         border-radius: 5px;
         cursor: pointer;
-    }
-
-    .redmy-button {
-        display: inline-block;
-        background-color: #f50606;
-        color: white;
-        border: none;
-        padding: 10px 20px;
-        font-size: 16px;
-        border-radius: 5px;
-        cursor: pointer;
-        text-decoration: none;
-        box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
-    }
-
-    .redmy-button:hover {
-        background-color: #0062cc;
-        box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
-    }
-
-    .redmy-button:active {
-        background-color: #005cbf;
-        box-shadow: none;
-
     }
 </style>
 <script>

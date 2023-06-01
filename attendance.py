@@ -37,5 +37,3 @@ class Attendance:
             self.root.destroy()
             sys.exit()
 
-
-            

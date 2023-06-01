@@ -554,8 +554,8 @@ def insertcheckin():
                 print("User already Checkin")
                 cursor4 = conn.cursor()
                 cursor4.execute(
-                    "UPDATE databasee.log SET TimeOut=%s WHERE ID=%s",
-                    (datetime.now().time(), ID),
+                    "UPDATE databasee.log SET TimeOut=%s WHERE ID=%s AND Datee=%s",
+                    (datetime.now().time(), ID, datetime.now().date()),
                 )
                 conn.commit()
 
